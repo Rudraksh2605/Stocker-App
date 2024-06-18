@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightGrey"
+    tools:context=".Home_Layout">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primaryColor"
+        android:theme="?attr/actionBarTheme" />
+
+    <!-- Top Gainer Title -->
+    <TextView
+        android:id="@+id/TopGainerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:text="Top Gainer"
+        android:textColor="@color/accentGreen"
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="16dp"
+        android:fontFamily="sans-serif-medium" />
+
+    <!-- Top Gainer List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/TopGainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TopGainerTitle"
+        android:layout_margin="16dp"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_stock_card"
+        android:background="@color/backgroundLight" />
+
+    <!-- Top Loser Title -->
+    <TextView
+        android:id="@+id/TopLoserTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TopGainer"
+        android:text="Top Loser"
+        android:textColor="@color/accentRed"
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="16dp"
+        android:fontFamily="sans-serif-medium" />
+
+    <!-- Top Loser List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/TopLoser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TopLoserTitle"
+        android:layout_margin="16dp"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_stock_card"
+        android:background="@color/backgroundLight" />
+
+    <!-- Trading Actions -->
+    <LinearLayout
+        android:id="@+id/trade_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:weightSum="3"
+        android:background="@color/backgroundDark">
+
+        <!-- Market Button -->
+        <Button
+            android:id="@+id/market_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Market"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_background" />
+
+        <!-- Orders Button -->
+        <Button
+            android:id="@+id/order_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Orders"
+            android:textColor="@android:color/white"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/button_background" />
+
+        <!-- Portfolio Button -->
+        <Button
+            android:id="@+id/portfolio_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Portfolio"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_background" />
+    </LinearLayout>
+</RelativeLayout>
