@@ -5,7 +5,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +17,7 @@ public class TopGainer implements ApiDataRetrieval.ApiDataCallback {
 
     public TopGainer() {
         stockList = new ArrayList<>();
-        previousPrices = new HashMap<>();
+        previousPrices = new LinkedHashMap<>(); // Using LinkedHashMap for predictable iteration order
         stockChanges = new ArrayList<>();
     }
 
@@ -60,25 +60,19 @@ public class TopGainer implements ApiDataRetrieval.ApiDataCallback {
                 previousPrices.put(symbol, currentPrice);
             } catch (NumberFormatException e) {
                 // Handle the case where the current price is not a valid number
-                System.err.println("Invalid price for stock: " + symbol + " with price: " + currentPriceString);
+                Log.e("TopGainer", "Invalid price for stock: " + symbol + " with price: " + currentPriceString);
             }
         }
     }
 
     private void sortStocksByPercentageChange() {
-        Collections.sort(stockChanges, new Comparator<StockChange>() {
-            @Override
-            public int compare(StockChange o1, StockChange o2) {
-                return Double.compare(o2.getPercentageChange(), o1.getPercentageChange());
-            }
-        });
+        Collections.sort(stockChanges, Comparator.comparingDouble(StockChange::getPercentageChange).reversed());
 
         // Logging the sorted list
         for (StockChange stockChange : stockChanges) {
             Log.e("Sorted List", stockChange.getStock().getSymbol() + ": " + stockChange.getPercentageChange() + "%");
         }
     }
-
 
     public interface DataUpdateListener {
         void onDataUpdated(List<StockChange> stockChanges);
