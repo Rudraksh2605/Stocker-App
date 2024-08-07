@@ -4,97 +4,116 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
+
+    android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
     tools:context=".auth.Log_In_Page">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal">
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="300dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/umberwine"
+        android:background="@drawable/edittext_background"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/logo" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:padding="24dp"
+        android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+        android:background="@drawable/round_top"
+        android:layout_marginTop="80dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/login_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical">
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+            android:backgroundTint="?attr/colorBackgroundDrawable"
+            android:layout_marginTop="18dp"
+            android:text="LOGIN"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Log In"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:layout_marginTop="20dp" />
+        <EditText
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+            android:background="@drawable/edittext_background"
+            android:hint="Username"
+            android:padding="12dp" />
 
-            <EditText
-                android:id="@+id/login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:layout_margin="10dp"
-                android:hint="Email" />
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+            android:background="@drawable/edittext_background"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:padding="12dp" />
 
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:padding="15dp"
-                android:inputType="textPassword"
-                android:hint="Password" />
+        <Button
+            android:id="@+id/LogInButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:theme="@style/ButtonTheme"
+            android:text="Sign In"
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/LogInButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="Log In"
-                android:textAppearance="?android:textAppearanceMedium" />
 
-            <!-- Use a horizontal LinearLayout to include Google logo and text -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_margin="10dp">
+        <TextView
+            android:id="@+id/forget_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+            android:backgroundTint="?attr/colorBackgroundDrawable"
+            android:layout_marginTop="16dp"
+            android:text="Forgot Password"
+            android:textSize="16sp" />
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/google_logo_foreground"
-                    android:contentDescription="Google logo" />
 
-                <Button
-                    android:id="@+id/sign_in_with_google"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sign In With Google"
-                    android:padding="5dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:layout_marginStart="10dp"/>
-            </LinearLayout>
+        <Button
+            android:id="@+id/sign_in_with_google"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Continue with Google"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:theme="@style/ButtonTheme"
+            app:icon="@drawable/google_logo"
+            app:iconGravity="end"
+            app:iconSize="32dp" />
 
-            <TextView
-                android:id="@+id/forget_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Forgot Password"
-                android:gravity="center"
-                android:padding="5dp"
-                android:layout_marginTop="10dp" />
+        <TextView
+            android:id="@+id/sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+            android:backgroundTint="?attr/colorBackgroundDrawable"
+            android:layout_marginTop="24dp"
+            android:text="Not Registered ?   Create account"
+            android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/sign_up"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="Don't have an Account? Sign up here."
-                android:layout_marginTop="10dp" />
+    </TableLayout>
 
-        </LinearLayout>
 
-    </ScrollView>
+
 
 </LinearLayout>

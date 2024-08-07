@@ -3,5 +3,16 @@
     <style name="Base.Theme.Stocker" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+        <item name="android:background">@color/anecdote</item>
+        <item name="android:colorPrimary">@color/dear_rosaline</item>
+        <item name="android:textColorSecondary">@color/dear_rosaline</item>
+        <item name="android:textColor">@color/west_deserts</item>
+        <item name="colorBackgroundDrawable">@color/secret_society</item>
+
+    </style>
+
+    <style name="ButtonTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="android:backgroundTint">@color/loved_lost_club</item>
     </style>
 </resources>

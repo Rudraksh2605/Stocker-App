@@ -3,7 +3,17 @@
     <style name="Base.Theme.Stocker" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:background">@color/loved_lost_club</item>
+        <item name="android:colorPrimary">@color/umberwine</item>
+        <item name="android:textColorSecondary">@color/umberwine</item>
+        <item name="android:textColor">@color/secret_society</item>
+        <item name="customColorDrawableValue">@color/secret_society</item>
+        <item name="colorBackgroundDrawable">@color/dear_rosaline</item>
     </style>
 
     <style name="Theme.Stocker" parent="Base.Theme.Stocker" />
+
+    <style name="ButtonTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="android:backgroundTint">@color/umberwine</item>
+    </style>
 </resources>
