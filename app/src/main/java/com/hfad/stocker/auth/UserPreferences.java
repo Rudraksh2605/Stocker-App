@@ -1,4 +1,4 @@
-package com.hfad.stocker;
+package com.hfad.stocker.auth;
 
 import android.content.Context;
 import android.content.SharedPreferences;

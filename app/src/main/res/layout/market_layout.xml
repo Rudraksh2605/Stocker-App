@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryBackground"
-    tools:context=".Home_Layout">
+    tools:context=".home.Home_Layout">
 
     <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar

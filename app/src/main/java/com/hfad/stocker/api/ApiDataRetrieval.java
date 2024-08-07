@@ -1,5 +1,5 @@
 
-package com.hfad.stocker;
+package com.hfad.stocker.api;
 
 import android.util.Log;
 
@@ -38,11 +38,11 @@ public class ApiDataRetrieval {
             public void run() {
                 fetchData();
             }
-        }, 0, 1000);
+        }, 0, 60000);
     }
 
     public void stopRealtimeUpdates() {
-        if (timer!= null) {
+        if (timer != null) {
             timer.cancel();
             timer = null;
         }
@@ -71,12 +71,16 @@ public class ApiDataRetrieval {
     }
 
     private void fetchDataWithCallback(List<ApiResponseItem> data) {
-        if (callback!= null) {
+        if (callback != null) {
             callback.onDataFetched(data);
         }
     }
 
     public interface ApiDataCallback {
         void onDataFetched(List<ApiResponseItem> apiDataModels);
+    }
+
+    public  void retrieveData() {
+        fetchData();
     }
 }

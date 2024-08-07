@@ -1,10 +1,11 @@
-package com.hfad.stocker;
+package com.hfad.stocker.home;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.text.DecimalFormat;
 
-public class TopLoser implements TopGainer.DataUpdateListener {
+public class TopLoser extends TopGainer {
     private List<TopGainer.StockChange> topLoserList;
 
     public TopLoser() {
@@ -13,13 +14,16 @@ public class TopLoser implements TopGainer.DataUpdateListener {
 
     public void update(List<TopGainer.StockChange> stockChanges) {
         topLoserList = new ArrayList<>(stockChanges);
-        Collections.reverse(topLoserList); // Assuming the list is sorted by gain and you want the opposite
+        Collections.reverse(topLoserList);
         logTopLosers();
     }
 
     private void logTopLosers() {
+
+        DecimalFormat df = new DecimalFormat("#.##");
+
         for (TopGainer.StockChange stockChange : topLoserList) {
-            System.out.println("Top Loser: " + stockChange.getStock().getSymbol() + ": " + stockChange.getPercentageChange() + "%");
+            System.out.println("Top Loser: " + stockChange.getSymbol() + ": " + stockChange.getPercentageChange() + "%");
         }
     }
 
@@ -27,7 +31,7 @@ public class TopLoser implements TopGainer.DataUpdateListener {
         return topLoserList;
     }
 
-    @Override
+
     public void onDataUpdated(List<TopGainer.StockChange> stockChanges) {
         update(stockChanges);
     }

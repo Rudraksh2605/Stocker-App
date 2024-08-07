@@ -1,4 +1,4 @@
-package com.hfad.stocker;
+package com.hfad.stocker.auth;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.hfad.stocker.R;
+import com.hfad.stocker.home.Home_Layout;
 
 public class Email_Registration extends AppCompatActivity {
 

@@ -2,19 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
     android:orientation="horizontal"
-    tools:context=".Log_In_Page">
-
+    tools:context=".auth.Log_In_Page">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
-
+        android:gravity="center_horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,13 +18,13 @@
             android:gravity="center"
             android:orientation="vertical">
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Log In"
-                android:textAppearance="?android:textAppearanceLarge" />
+                android:textAppearance="?android:textAppearanceLarge"
+                android:layout_marginTop="20dp" />
 
             <EditText
                 android:id="@+id/login"
@@ -45,8 +41,7 @@
                 android:layout_margin="10dp"
                 android:padding="15dp"
                 android:inputType="textPassword"
-                android:hint="Password"
-                />
+                android:hint="Password" />
 
             <Button
                 android:id="@+id/LogInButton"
@@ -56,13 +51,29 @@
                 android:text="Log In"
                 android:textAppearance="?android:textAppearanceMedium" />
 
-
-            <Button
-                android:id="@+id/sign_in_with_google"
+            <!-- Use a horizontal LinearLayout to include Google logo and text -->
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign In With Google"
-                android:padding="5dp"/>
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_margin="10dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/google_logo"
+                    android:contentDescription="Google logo" />
+
+                <Button
+                    android:id="@+id/sign_in_with_google"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sign In With Google"
+                    android:padding="5dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:layout_marginStart="10dp"/>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/forget_password"
@@ -70,7 +81,8 @@
                 android:layout_height="wrap_content"
                 android:text="Forgot Password"
                 android:gravity="center"
-                android:padding="5dp" />
+                android:padding="5dp"
+                android:layout_marginTop="10dp" />
 
             <TextView
                 android:id="@+id/sign_up"
@@ -78,8 +90,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="Don't have an Account? Sign up here." />
-
+                android:text="Don't have an Account? Sign up here."
+                android:layout_marginTop="10dp" />
 
         </LinearLayout>
 

@@ -1,4 +1,4 @@
-package com.hfad.stocker;
+package com.hfad.stocker.home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,18 +9,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hfad.stocker.R;
+import com.hfad.stocker.api.ApiDataRetrieval;
+import com.hfad.stocker.api.ApiResponseItem;
+import com.hfad.stocker.market.MarketLayoutActivity;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 
-public class Home_Layout extends AppCompatActivity implements TopGainer.DataUpdateListener {
+public class Home_Layout extends AppCompatActivity {
 
     private Button marketButton;
     private Button portfolioButton;
     private Button orderButton;
     private RecyclerView topGainerRecyclerView;
     private RecyclerView topLoserRecyclerView;
-    private StockAdapter stockAdapter;
+    private TopGainerAdapter topGainerAdapter;
     private TopLoserAdapter topLoserAdapter;
     private TopGainer topGainer;
     private TopLoser topLoser;
@@ -30,12 +36,10 @@ public class Home_Layout extends AppCompatActivity implements TopGainer.DataUpda
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_layout);
 
-        // Initialize the buttons with their corresponding views
         marketButton = findViewById(R.id.market_button);
         portfolioButton = findViewById(R.id.portfolio_button);
         orderButton = findViewById(R.id.order_button);
 
-        // Set the click listeners for each button
         marketButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,36 +61,44 @@ public class Home_Layout extends AppCompatActivity implements TopGainer.DataUpda
             }
         });
 
-        // Setup RecyclerView for Top Gainer
         topGainerRecyclerView = findViewById(R.id.TopGainer);
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        topGainerAdapter = new TopGainerAdapter(new ArrayList<>());
         topGainerRecyclerView.setLayoutManager(horizontalLayoutManager);
-        stockAdapter = new StockAdapter(); // Initialize without passing a list
-        topGainerRecyclerView.setAdapter(stockAdapter);
+        topGainerRecyclerView.setAdapter(topGainerAdapter);
 
-        // Setup RecyclerView for Top Loser
         topLoserRecyclerView = findViewById(R.id.TopLoser);
         LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         topLoserRecyclerView.setLayoutManager(horizontalLayoutManager2);
-        topLoserAdapter = new TopLoserAdapter(); // Initialize without passing a list
+        topLoserAdapter = new TopLoserAdapter();
         topLoserRecyclerView.setAdapter(topLoserAdapter);
 
-        // Initialize TopGainer and start fetching data
         topGainer = new TopGainer();
-        topGainer.setDataUpdateListener(this);
+        topGainer.start();  // Start data fetching process
 
         ApiDataRetrieval apiDataRetrieval = new ApiDataRetrieval();
-        apiDataRetrieval.startRealtimeUpdates(topGainer);
+        apiDataRetrieval.startRealtimeUpdates(new ApiDataRetrieval.ApiDataCallback() {
+            @Override
+            public void onDataFetched(List<ApiResponseItem> apiDataModels) {
+                // Convert ApiResponseItem to LinkedHashMap<String, Double>
+                LinkedHashMap<String, Double> data = new LinkedHashMap<>();
+                for (ApiResponseItem item : apiDataModels) {
+                    data.put(item.getSymbol(), Double.parseDouble(item.getCurrentPrice()));
+                }
+                topGainer.updateCurrentPrices();
+            }
 
-        // Initialize TopLoser and start fetching data
+//            @Override
+//            public void onDataRetrieved(LinkedHashMap<String, Double> data) {
+//                topGainer.updateCurrentPrices(data);
+//            }
+        });
+
         topLoser = new TopLoser();
-        topLoserAdapter.setStockChanges(topLoser.getTopLoserList()); // Set initial data for top losers
     }
 
-    @Override
     public void onDataUpdated(List<TopGainer.StockChange> stockChanges) {
-        stockAdapter.setStockChanges(stockChanges);
-        // Update top loser adapter with reversed list (assuming it's already sorted)
+        topGainerAdapter.setStockChanges(stockChanges);
         List<TopGainer.StockChange> reversedList = new ArrayList<>(stockChanges);
         Collections.reverse(reversedList);
         topLoserAdapter.setStockChanges(reversedList);

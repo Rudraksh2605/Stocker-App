@@ -1,4 +1,4 @@
-package com.hfad.stocker;
+package com.hfad.stocker.api;
 
 import com.google.gson.annotations.SerializedName;
 

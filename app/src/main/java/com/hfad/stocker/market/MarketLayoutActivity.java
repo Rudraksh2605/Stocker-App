@@ -1,4 +1,4 @@
-package com.hfad.stocker;
+package com.hfad.stocker.market;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -17,6 +17,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.hfad.stocker.R;
+import com.hfad.stocker.api.ApiDataRetrieval;
+import com.hfad.stocker.api.ApiResponseItem;
+import com.hfad.stocker.market.SearchStock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,6 +105,7 @@ public class MarketLayoutActivity extends AppCompatActivity {
                                 }
                             });
                         }
+
 
                     });
                 }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -15,13 +16,13 @@
         android:theme="@style/Theme.Stocker"
         tools:targetApi="31">
         <activity
-            android:name=".MarketLayoutActivity"
+            android:name=".market.MarketLayoutActivity"
             android:exported="false" />
         <activity
-            android:name=".Home_Layout"
+            android:name=".home.Home_Layout"
             android:exported="false" />
         <activity
-            android:name=".Log_In_Page"
+            android:name=".auth.Log_In_Page"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Email_Registration"
+            android:name=".auth.Email_Registration"
             android:exported="true" />
     </application>
 

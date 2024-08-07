@@ -1,23 +1,22 @@
-package com.hfad.stocker;
-
+package com.hfad.stocker.home;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hfad.stocker.R;
+import com.hfad.stocker.home.TopGainer;
+
 import java.util.List;
 
-public class TopLoserAdapter extends RecyclerView.Adapter<TopLoserAdapter.ViewHolder> {
-
+public class TopGainerAdapter extends RecyclerView.Adapter<TopGainerAdapter.ViewHolder> {
     private List<TopGainer.StockChange> stockChanges;
 
-    public void setStockChanges(List<TopGainer.StockChange> stockChanges) {
+    public TopGainerAdapter(List<TopGainer.StockChange> stockChanges) {
         this.stockChanges = stockChanges;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -30,17 +29,22 @@ public class TopLoserAdapter extends RecyclerView.Adapter<TopLoserAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TopGainer.StockChange stockChange = stockChanges.get(position);
-        holder.stockName.setText(stockChange.getStock().getSymbol());
-        holder.stockPrice.setText(String.valueOf(stockChange.getStock().getCurrentPrice()));
-        holder.percentageGain.setText(String.format("%s%%", stockChange.getPercentageChange()));
+        holder.stockName.setText(stockChange.getSymbol());
+        holder.stockPrice.setText(String.valueOf(stockChange.getCurrentPrice()));
+        holder.percentageGain.setText(String.format("%.2f%%", stockChange.getPercentageChange()));
     }
 
     @Override
     public int getItemCount() {
-        return stockChanges != null ? stockChanges.size() : 0;
+        return stockChanges.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public void setStockChanges(List<TopGainer.StockChange> stockChanges) {
+        this.stockChanges = stockChanges;
+        notifyDataSetChanged();
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
         TextView stockName;
         TextView stockPrice;
         TextView percentageGain;
@@ -53,4 +57,3 @@ public class TopLoserAdapter extends RecyclerView.Adapter<TopLoserAdapter.ViewHo
         }
     }
 }
-
