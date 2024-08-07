@@ -2,6 +2,7 @@ package com.hfad.stocker.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -83,7 +84,15 @@ public class Home_Layout extends AppCompatActivity {
                 // Convert ApiResponseItem to LinkedHashMap<String, Double>
                 LinkedHashMap<String, Double> data = new LinkedHashMap<>();
                 for (ApiResponseItem item : apiDataModels) {
-                    data.put(item.getSymbol(), Double.parseDouble(item.getCurrentPrice()));
+                    if (item.getCurrentPrice() != null && !item.getCurrentPrice().equals("#N/A")) {
+                        try {
+                            data.put(item.getSymbol(), Double.parseDouble(item.getCurrentPrice()));
+                        } catch (NumberFormatException e) {
+                            Log.e("Error", "Failed to parse current price: " + e.getMessage());
+                        }
+                    } else {
+                        Log.d("Info", "Current price is not available for " + item.getSymbol());
+                    }
                 }
                 topGainer.updateCurrentPrices();
             }

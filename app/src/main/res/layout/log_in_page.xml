@@ -62,7 +62,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/google_logo"
+                    android:src="@drawable/google_logo_foreground"
                     android:contentDescription="Google logo" />
 
                 <Button
