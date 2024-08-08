@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "897489800348-5948jvvdq6nrthlphjq8uu4440nmoujc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rud.stocker",
+            "certificate_hash": "760d3dfe79ebb09d765dec782be87de984045176"
+          }
+        },
+        {
           "client_id": "897489800348-aar1nhdfkk11fjah9a3o6ommrhkji7ut.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
