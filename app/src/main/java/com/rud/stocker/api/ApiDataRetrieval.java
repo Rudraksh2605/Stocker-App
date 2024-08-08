@@ -1,5 +1,5 @@
 
-package com.hfad.stocker.api;
+package com.rud.stocker.api;
 
 import android.util.Log;
 

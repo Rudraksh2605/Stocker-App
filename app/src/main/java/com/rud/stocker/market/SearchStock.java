@@ -1,6 +1,6 @@
-package com.hfad.stocker.market;
+package com.rud.stocker.market;
 
-import com.hfad.stocker.api.ApiResponseItem;
+import com.rud.stocker.api.ApiResponseItem;
 
 import java.util.ArrayList;
 import java.util.List;

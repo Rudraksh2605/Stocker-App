@@ -1,4 +1,4 @@
-package com.hfad.stocker.market;
+package com.rud.stocker.market;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -18,10 +18,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hfad.stocker.R;
-import com.hfad.stocker.api.ApiDataRetrieval;
-import com.hfad.stocker.api.ApiResponseItem;
-import com.hfad.stocker.market.SearchStock;
+import com.rud.stocker.R;
+import com.rud.stocker.api.ApiDataRetrieval;
+import com.rud.stocker.api.ApiResponseItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,9 +1,10 @@
-package com.hfad.stocker.auth;
+package com.rud.stocker.auth;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,8 +29,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
-import com.hfad.stocker.R;
-import com.hfad.stocker.home.Home_Layout;
+import com.rud.stocker.home.Home_Layout;
+import com.rud.stocker.R;
 
 import java.util.HashMap;
 
@@ -61,18 +62,18 @@ public class Log_In_Page extends AppCompatActivity {
 
         FirebaseUser user = fauth.getCurrentUser();
         if (user != null) {
-            startActivity(new Intent(this, Home_Layout.class));
-            finish();
+            navigateToHome();
         } else {
-            loginDetails();
+            initializeUI();
         }
 
         googleAuth = findViewById(R.id.sign_in_with_google);
         database = FirebaseDatabase.getInstance();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("http://955934810329-jqf4265cajl7lhgj1fl4votha8o7d6re.apps.googleusercontent.com")
-                .requestEmail().build();
+                .requestIdToken("R.string.default_web_client_id")
+                .requestEmail()
+                .build();
 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
@@ -86,7 +87,7 @@ public class Log_In_Page extends AppCompatActivity {
         mBar = new ProgressDialog(this);
     }
 
-    private void loginDetails() {
+    private void initializeUI() {
         mEmail = findViewById(R.id.login);
         mPass = findViewById(R.id.password);
         btnLogin = findViewById(R.id.LogInButton);
@@ -96,35 +97,7 @@ public class Log_In_Page extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = mEmail.getText().toString().trim();
-                String pass = mPass.getText().toString().trim();
-
-                if (TextUtils.isEmpty(email)) {
-                    mEmail.setError("Email Required!");
-                    return;
-                }
-
-                if (TextUtils.isEmpty(pass)) {
-                    mPass.setError("Password is Required!");
-                    return;
-                }
-                mBar.setMessage("Processing");
-                mBar.show();
-
-                fauth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            mBar.dismiss();
-                            Toast.makeText(getApplicationContext(), "LogIn Successful", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), Home_Layout.class));
-                            userPreferences.saveUserCredentials(email, pass);
-                        } else {
-                            mBar.dismiss();
-                            Toast.makeText(getApplicationContext(), "LogIn Failed!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                handleEmailPasswordLogin();
             }
         });
 
@@ -143,6 +116,39 @@ public class Log_In_Page extends AppCompatActivity {
         });
     }
 
+    private void handleEmailPasswordLogin() {
+        String email = mEmail.getText().toString().trim();
+        String pass = mPass.getText().toString().trim();
+
+        if (TextUtils.isEmpty(email)) {
+            mEmail.setError("Email Required!");
+            return;
+        }
+
+        if (TextUtils.isEmpty(pass)) {
+            mPass.setError("Password is Required!");
+            return;
+        }
+
+        mBar.setMessage("Processing");
+        mBar.show();
+
+        fauth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                mBar.dismiss();
+                if (task.isSuccessful()) {
+                    Toast.makeText(getApplicationContext(), "LogIn Successful", Toast.LENGTH_SHORT).show();
+                    userPreferences.saveUserCredentials(email, pass);
+                    navigateToHome();
+                } else {
+                    Toast.makeText(getApplicationContext(), "LogIn Failed!", Toast.LENGTH_SHORT).show();
+                    Log.e("Manual Log In Failed", "Authentication Failed.");
+                }
+            }
+        });
+    }
+
     private void googleSignIn() {
         Intent intent = googleSignInClient.getSignInIntent();
         startActivityForResult(intent, RC_SIGN_IN);
@@ -153,48 +159,52 @@ public class Log_In_Page extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
-            if (resultCode == RESULT_OK) {
-                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-                try {
-                    GoogleSignInAccount account = task.getResult(ApiException.class);
-                    if (account != null) {
-                        firebaseAuth(account.getIdToken());
-                    } else {
-                        Toast.makeText(this, "Google sign-in failed", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (ApiException e) {
-                    Toast.makeText(this, "Google sign-in failed: " + e.getStatusCode(), Toast.LENGTH_SHORT).show();
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                if (account != null) {
+                    firebaseAuthWithGoogle(account.getIdToken());
+                } else {
+                    Toast.makeText(this, "Google sign-in failed", Toast.LENGTH_SHORT).show();
+                    Log.e("GoogleSignIn", "Google sign-in failed");
                 }
+            } catch (ApiException e) {
+                Toast.makeText(this, "Google sign-in failed: " + e.getStatusCode(), Toast.LENGTH_SHORT).show();
+                Log.e("GoogleSignIn", "Google sign-in failed", e);
             }
         }
     }
 
-    private void firebaseAuth(String idToken) {
+    private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        fauth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    FirebaseUser user = fauth.getCurrentUser();
+                    userPreferences.saveUserCredentials(user.getEmail(), user.getUid());
+                    saveUserToDatabase(user);
+                    navigateToHome();
+                } else {
+                    Toast.makeText(Log_In_Page.this, "Authentication Failed.", Toast.LENGTH_SHORT).show();
+                    Log.e("GoogleSignIn", "Authentication Failed.");
+                }
+            }
+        });
+    }
 
-        fauth.signInWithCredential(credential)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = fauth.getCurrentUser();
-                            userPreferences.saveUserCredentials(user.getEmail(), user.getUid());
+    private void saveUserToDatabase(FirebaseUser user) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("id", user.getUid());
+        map.put("name", user.getDisplayName());
+        if (user.getPhotoUrl() != null) {
+            map.put("profile", user.getPhotoUrl().toString());
+        }
+        database.getReference().child("user").child(user.getUid()).setValue(map);
+    }
 
-                            HashMap<String, Object> map = new HashMap<>();
-                            map.put("id", user.getUid());
-                            map.put("name", user.getDisplayName());
-                            if (user.getPhotoUrl() != null) {
-                                map.put("profile", user.getPhotoUrl().toString());
-                            }
-
-                            database.getReference().child("user").child(user.getUid()).setValue(map);
-
-                            Intent intent = new Intent(Log_In_Page.this, Home_Layout.class);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(Log_In_Page.this, "something went wrong", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+    private void navigateToHome() {
+        startActivity(new Intent(Log_In_Page.this, Home_Layout.class));
+        finish();
     }
 }

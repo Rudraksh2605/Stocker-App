@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Stocker</string>
+    <string name="default_web_client_id">897489800348-irj94u46lhnue2ddato3m29d98ntsa0a.apps.googleusercontent.com</string>
+
 </resources>

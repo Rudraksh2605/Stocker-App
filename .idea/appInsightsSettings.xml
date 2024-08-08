@@ -9,10 +9,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.hfad.stocker" />
-                  <option name="mobileSdkAppId" value="1:955934810329:android:854926054babb776badec8" />
-                  <option name="projectId" value="stocker-9dfc6" />
-                  <option name="projectNumber" value="955934810329" />
+                  <option name="appId" value="com.rud.stocker" />
+                  <option name="mobileSdkAppId" value="1:897489800348:android:33b01b57b4d7947510f159" />
+                  <option name="projectId" value="stocker-app-3c74f" />
+                  <option name="projectNumber" value="897489800348" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

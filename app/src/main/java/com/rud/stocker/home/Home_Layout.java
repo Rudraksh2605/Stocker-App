@@ -1,4 +1,4 @@
-package com.hfad.stocker.home;
+package com.rud.stocker.home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,10 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hfad.stocker.R;
-import com.hfad.stocker.api.ApiDataRetrieval;
-import com.hfad.stocker.api.ApiResponseItem;
-import com.hfad.stocker.market.MarketLayoutActivity;
+import com.rud.stocker.R;
+import com.rud.stocker.api.ApiDataRetrieval;
+import com.rud.stocker.api.ApiResponseItem;
+import com.rud.stocker.market.MarketLayoutActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;

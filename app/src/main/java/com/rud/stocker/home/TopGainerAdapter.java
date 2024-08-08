@@ -1,4 +1,4 @@
-package com.hfad.stocker.home;
+package com.rud.stocker.home;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,8 +7,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hfad.stocker.R;
-import com.hfad.stocker.home.TopGainer;
+import com.rud.stocker.R;
 
 import java.util.List;
 

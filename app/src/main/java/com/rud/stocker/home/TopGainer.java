@@ -1,4 +1,4 @@
-package com.hfad.stocker.home;
+package com.rud.stocker.home;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -15,8 +15,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.hfad.stocker.api.ApiDataRetrieval;
-import com.hfad.stocker.api.ApiResponseItem;
+import com.rud.stocker.api.ApiDataRetrieval;
+import com.rud.stocker.api.ApiResponseItem;
 
 import android.util.Log;
 

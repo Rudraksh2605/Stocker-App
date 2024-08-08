@@ -1,4 +1,4 @@
-package com.hfad.stocker;
+package com.rud.stocker;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.hfad.stocker", appContext.getPackageName());
+        assertEquals("com.com.stocker", appContext.getPackageName());
     }
 }

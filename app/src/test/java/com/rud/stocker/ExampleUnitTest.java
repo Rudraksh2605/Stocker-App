@@ -1,4 +1,4 @@
-package com.hfad.stocker;
+package com.rud.stocker;
 
 import org.junit.Test;
 

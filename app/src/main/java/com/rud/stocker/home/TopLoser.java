@@ -1,4 +1,4 @@
-package com.hfad.stocker.home;
+package com.rud.stocker.home;
 
 import java.util.ArrayList;
 import java.util.Collections;
