@@ -15,5 +15,6 @@
 
     <style name="ButtonTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="android:backgroundTint">@color/umberwine</item>
+        <item name="colorPrimary">@color/darkGrey</item>
     </style>
 </resources>
