@@ -21,7 +21,7 @@
         android:id="@+id/tvLoginTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log in to Stocker"
+        android:text=" Log in to Stocker"
         android:textColor="@android:color/white"
         android:backgroundTint="@android:color/black"
         android:textSize="30sp"
@@ -136,9 +136,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@drawable/btn_border"
+        android:backgroundTint="@android:color/black"
         android:text="Don't have an account! Register Here"
-
         android:textColor="@android:color/white" />
 
     <Button
