@@ -129,19 +129,6 @@
         android:text="OR"
         android:textColor="@android:color/darker_gray" />
 
-
-
-    <Button
-        android:id="@+id/sign_up"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:theme="@style/ButtonTheme"
-        android:background="@drawable/btn_border"
-        android:backgroundTint="@android:color/black"
-        android:text="Don't have an account! Register Here"
-        android:textColor="@android:color/white" />
-
     <Button
         android:id="@+id/sign_in_with_google"
         android:layout_width="match_parent"
@@ -155,6 +142,18 @@
         android:drawablePadding="8dp"
         android:textColor="@android:color/white"
         android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/sign_up"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:theme="@style/ButtonTheme"
+        android:backgroundTint="@android:color/black"
+        android:text="Don't have an account! Register Here"
+        android:textColor="@android:color/white" />
+
+
 
     <!-- Spacer -->
     <View
