@@ -50,19 +50,20 @@
         android:paddingTop="8dp"/>
 
     <!-- Email Input -->
+
     <EditText
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="    hello@comapny.com"
-        android:textColorHint="@android:color/darker_gray"
-        android:textColor="@android:color/white"
+        android:background="@drawable/edit_text_back"
         android:fontFamily="@font/roboto_light"
+        android:hint="    hello@comapny.com"
+        android:inputType="textEmailAddress"
         android:padding="12dp"
 
-        android:textSize="16dp"
-        android:background="@drawable/edit_text_back"
-        android:inputType="textEmailAddress"/>
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/darker_gray"
+        android:textSize="16dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -142,13 +143,13 @@
         android:background="@drawable/btn_border"
         android:backgroundTint="@android:color/black"
         android:drawableLeft="@drawable/google_logo"
-        android:fontFamily="@font/roboto_medium"
-        android:text="Continue with Google"
         android:drawablePadding="20dp"
-        android:textSize="16dp"
-        android:paddingRight="50dp"
+        android:fontFamily="@font/roboto_medium"
         android:paddingLeft="8dp"
+        android:paddingRight="50dp"
+        android:text="Continue with Google"
         android:textColor="@android:color/white"
+        android:textSize="16dp"
         android:theme="@style/ButtonTheme" />
 
     <Button

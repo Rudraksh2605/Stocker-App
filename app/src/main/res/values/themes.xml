@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Base application theme. -->
     <style name="Base.Theme.Stocker" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
@@ -9,9 +9,16 @@
         <item name="android:textColor">@color/secret_society</item>
         <item name="customColorDrawableValue">@color/secret_society</item>
         <item name="colorBackgroundDrawable">@color/dear_rosaline</item>
+        <item name="android:statusBarColor">@color/black</item>
+
     </style>
 
-    <style name="Theme.Stocker" parent="Base.Theme.Stocker" />
+    <style name="Theme.Stocker" parent="Base.Theme.Stocker">
+        <item name="android:statusBarColor">@color/black</item>/>
+
+
+    </style>
+
 
     <style name="ButtonTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="android:backgroundTint">@color/umberwine</item>

@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.identity.BeginSignInRequest;
+import com.google.android.gms.auth.api.identity.Identity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -20,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.rud.stocker.R;
 import com.rud.stocker.home.Home_Layout;
 
-public class Email_Registration extends AppCompatActivity {
+public class Email_Registration extends AppCompatActivity  {
 
     private EditText mEmail;
     private EditText mPass;
@@ -28,6 +30,8 @@ public class Email_Registration extends AppCompatActivity {
     private TextView mSignin;
     private ProgressDialog mBar;
     private UserPreferences userPreferences;
+    private Log_In_Page lg;
+    private Button gbtn;
 
     //Firebase
 
@@ -42,6 +46,7 @@ public class Email_Registration extends AppCompatActivity {
         mBar = new ProgressDialog(this);
         userPreferences = new UserPreferences(this);
         registration();
+
     }
 
     private void registration(){
@@ -49,6 +54,14 @@ public class Email_Registration extends AppCompatActivity {
         mPass = findViewById(R.id.password_registration);
         RegButton = findViewById(R.id.RegistrationButton);
         mSignin = findViewById(R.id.already_registered);
+        gbtn = findViewById(R.id.googleButton);
+
+        gbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         RegButton.setOnClickListener(new View.OnClickListener() {
             @Override
