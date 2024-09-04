@@ -4,29 +4,59 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lightGrey"
+    android:background="@color/market_back"
     tools:context=".home.Home_Layout">
 
     <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/primaryColor"
-        android:theme="?attr/actionBarTheme" />
+        android:background="@color/market_back"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/stocker_logo"
+            android:background="@color/market_back"
+            android:layout_gravity="start"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="STOCKER"
+            android:background="@color/market_back"
+            android:textColor="@color/white"
+            android:textSize="25dp"
+            android:fontFamily="@font/roboto_light"
+            />
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        app:dividerColor="@color/darkGrey"
+        />
 
     <!-- Top Gainer Title -->
     <TextView
         android:id="@+id/TopGainerTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/divider_toolbar"
         android:text="Top Gainer"
         android:textColor="@color/accentGreen"
         android:textSize="18sp"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="16dp"
-        android:fontFamily="sans-serif-medium" />
+        android:background="@color/market_back"
+        android:fontFamily="@font/roboto_light" />
 
     <!-- Top Gainer List -->
     <androidx.recyclerview.widget.RecyclerView
@@ -39,7 +69,7 @@
         android:layout_marginBottom="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_stock_card"
-        android:background="@color/backgroundLight" />
+        android:background="@color/market_back" />
 
     <!-- Top Loser Title -->
     <TextView
@@ -52,7 +82,8 @@
         android:textSize="18sp"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="16dp"
-        android:fontFamily="sans-serif-medium" />
+        android:background="@color/market_back"
+        android:fontFamily="@font/roboto_light" />
 
     <!-- Top Loser List -->
     <androidx.recyclerview.widget.RecyclerView
@@ -65,7 +96,14 @@
         android:layout_marginBottom="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_stock_card"
-        android:background="@color/backgroundLight" />
+        android:background="@color/market_back" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/trade_actions"
+        app:dividerColor="@color/darkGrey"
+        />
 
     <!-- Trading Actions -->
     <LinearLayout
@@ -75,39 +113,53 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:padding="16dp"
-        android:weightSum="3"
-        android:background="@color/backgroundDark">
+        android:background="@color/market_back">
+
+
 
         <!-- Market Button -->
-        <Button
+        <ImageButton
             android:id="@+id/market_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Market"
+            android:src="@drawable/trade"
             android:textColor="@android:color/white"
-            android:background="@drawable/button_background" />
+            android:background="@drawable/imagebuttonback" />
 
         <!-- Orders Button -->
-        <Button
+        <ImageButton
             android:id="@+id/order_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Orders"
+            android:src="@drawable/purchase"
             android:textColor="@android:color/white"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:background="@drawable/button_background" />
+            android:background="@drawable/imagebuttonback" />
 
         <!-- Portfolio Button -->
-        <Button
+        <ImageButton
             android:id="@+id/portfolio_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Portfolio"
+            android:src="@drawable/investment"
             android:textColor="@android:color/white"
-            android:background="@drawable/button_background" />
+            android:background="@drawable/imagebuttonback" />
+
+        <ImageButton
+            android:id="@+id/setting_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/imagebuttonback"
+            android:src="@drawable/settings"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
     </LinearLayout>
 </RelativeLayout>

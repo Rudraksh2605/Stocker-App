@@ -4,12 +4,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+
+    app:cardCornerRadius="5dp"
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/market_back"
         android:padding="16dp">
 
         <TextView
@@ -19,21 +21,29 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/stock_price"
             android:textSize="14sp"
+            android:fontFamily="@font/roboto_light"
+            android:background="@color/market_back"
             android:textStyle="bold"
-            android:textColor="@color/darkGrey" />
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/stock_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Stock Name"
+            android:fontFamily="@font/roboto_light"
+            android:textColor="@color/white"
             android:textSize="18sp"
+            android:background="@color/market_back"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/stock_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:fontFamily="@font/roboto_light"
+            android:background="@color/market_back"
             android:layout_below="@id/stock_name"
             android:text="Stock Price"
             android:textSize="16sp" />

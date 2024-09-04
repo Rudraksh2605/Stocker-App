@@ -5,12 +5,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
+import com.rud.stocker.Order.Order_Layout;
+import com.rud.stocker.Portfolio.Portfolio_Layout;
 import com.rud.stocker.R;
+import com.rud.stocker.Settings.Setting_Layout;
 import com.rud.stocker.api.ApiDataRetrieval;
 import com.rud.stocker.api.ApiResponseItem;
 import com.rud.stocker.market.MarketLayoutActivity;
@@ -22,9 +29,10 @@ import java.util.List;
 
 public class Home_Layout extends AppCompatActivity {
 
-    private Button marketButton;
-    private Button portfolioButton;
-    private Button orderButton;
+    private ImageButton marketButton;
+    private ImageButton portfolioButton;
+    private ImageButton orderButton;
+    private ImageButton settingButton;
     private RecyclerView topGainerRecyclerView;
     private RecyclerView topLoserRecyclerView;
     private TopGainerAdapter topGainerAdapter;
@@ -40,6 +48,7 @@ public class Home_Layout extends AppCompatActivity {
         marketButton = findViewById(R.id.market_button);
         portfolioButton = findViewById(R.id.portfolio_button);
         orderButton = findViewById(R.id.order_button);
+        settingButton = findViewById(R.id.setting_button);
 
         marketButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +61,7 @@ public class Home_Layout extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start the Portfolio activity here
+                startActivity(new Intent(getApplicationContext(), Portfolio_Layout.class));
             }
         });
 
@@ -59,8 +69,17 @@ public class Home_Layout extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start the Order activity here
+                startActivity(new Intent(getApplicationContext(), Order_Layout.class));
             }
         });
+        settingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Setting_Layout.class));
+            }
+        });
+
+
 
         topGainerRecyclerView = findViewById(R.id.TopGainer);
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);

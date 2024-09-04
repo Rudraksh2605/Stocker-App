@@ -1,5 +1,6 @@
 package com.rud.stocker.market;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,9 +20,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
+import com.rud.stocker.Portfolio.Portfolio_Layout;
 import com.rud.stocker.R;
+import com.rud.stocker.Settings.Setting_Layout;
 import com.rud.stocker.api.ApiDataRetrieval;
 import com.rud.stocker.api.ApiResponseItem;
+import com.rud.stocker.home.Home_Layout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,11 +45,20 @@ public class MarketLayoutActivity extends AppCompatActivity {
     private List<ApiResponseItem> originalStockList;
     private Map<String, ApiResponseItem> stockMap;
     private boolean isSearching = false;
+    private ImageButton homebtn;
+    private ImageButton portbtn;
+    private ImageButton settingbtn;
+    private ImageButton backbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.market_layout);
+
+        homebtn = findViewById(R.id.home_button);
+        portbtn = findViewById(R.id.portfolio_button);
+        settingbtn = findViewById(R.id.setting_button);
+        backbtn = findViewById(R.id.back_button);
 
         recyclerView = findViewById(R.id.stock_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -53,6 +70,38 @@ public class MarketLayoutActivity extends AppCompatActivity {
         searchStock = new SearchStock();
 
         stockMap = new HashMap<>();
+
+        //Buttons
+        homebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Home_Layout.class));
+            }
+        });
+
+        portbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Portfolio_Layout.class));
+            }
+        });
+
+        settingbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Setting_Layout.class));
+            }
+        });
+
+        backbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Home_Layout.class));
+            }
+        });
+
+
+
 
         // Set up the search bar
         EditText searchBar = findViewById(R.id.search_edit_text);

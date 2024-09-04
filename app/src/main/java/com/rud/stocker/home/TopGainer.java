@@ -11,31 +11,34 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.rud.stocker.api.ApiDataRetrieval;
 import com.rud.stocker.api.ApiResponseItem;
 
 import android.util.Log;
 
 public class TopGainer extends ApiDataRetrieval {
-    private FirebaseDatabase database;
+    private FirebaseFirestore firestore;
     private LinkedHashMap<String, Double> currentPriceMap;
     private LinkedHashMap<String, Double> previousPriceMap;
     private LinkedHashMap<String, StockChange> topGainerMap;
     private LinkedHashMap<String, StockChange> topLoserMap;
 
     public TopGainer() {
-        database = FirebaseDatabase.getInstance();
+        firestore = FirebaseFirestore.getInstance();
     }
 
     public void start() {
+        Log.d("TopGainer", "Starting the process...");
+
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                Log.d("TopGainer", "Saving closing prices...");
                 saveClosingPriceList();
             }
         }, getClosingTime());
@@ -43,70 +46,111 @@ public class TopGainer extends ApiDataRetrieval {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                Log.d("TopGainer", "Calculating top gainers and losers...");
                 calculateTopGainersAndLosers();
             }
-            }, getOpeningTime());
+        }, getOpeningTime());
 
         Timer minuteTimer = new Timer();
         minuteTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                Log.d("TopGainer", "Updating current prices...");
                 updateCurrentPrices();
             }
         }, 0, 60000);
     }
 
+
     public void updateCurrentPrices() {
+        Log.d("TopGainer", "Fetching current prices from API...");
         ApiDataRetrieval apiDataRetrieval = new ApiDataRetrieval();
         apiDataRetrieval.startRealtimeUpdates(new ApiDataCallback() {
-
             @Override
             public void onDataFetched(List<ApiResponseItem> apiDataModels) {
-
+                Log.d("TopGainer", "API data fetched.");
             }
 
             public void onDataRetrieved(LinkedHashMap<String, Double> data) {
+                Log.d("TopGainer", "Current prices retrieved.");
                 currentPriceMap = data;
-                database.getReference("currentPriceList").setValue(currentPriceMap);
+                firestore.collection("currentPriceList").document("prices").set(currentPriceMap)
+                        .addOnSuccessListener(aVoid -> Log.d("TopGainer", "Current prices updated in Firestore"))
+                        .addOnFailureListener(e -> Log.e("TopGainer", "Error updating current prices", e));
             }
         });
     }
 
+
     private void saveClosingPriceList() {
+        Log.d("TopGainer", "Fetching closing prices from API...");
         ApiDataRetrieval apiDataRetrieval = new ApiDataRetrieval();
         apiDataRetrieval.startRealtimeUpdates(new ApiDataCallback() {
             @Override
             public void onDataFetched(List<ApiResponseItem> apiDataModels) {
-
+                Log.d("TopGainer", "API data fetched.");
             }
 
             public void onDataFetched(LinkedHashMap<String, Double> data) {
+                Log.d("TopGainer", "Closing prices retrieved.");
                 currentPriceMap = data;
-                database.getReference("closingPriceList").setValue(currentPriceMap);
+                firestore.collection("closingPriceList").document("prices").set(currentPriceMap)
+                        .addOnSuccessListener(avoid -> Log.d("TopGainer", "Closing prices saved in Firestore"))
+                        .addOnFailureListener(e -> Log.e("TopGainer", "Error saving closing prices", e));
             }
         });
     }
+
 
     private void calculateTopGainersAndLosers() {
-        database.getReference("closingPriceList").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                previousPriceMap = (LinkedHashMap<String, Double>) dataSnapshot.getValue();
-                if (previousPriceMap != null && currentPriceMap != null) {
-                    LinkedHashMap<String, StockChange> priceChangeMap = calculatePriceChangeMap(currentPriceMap, previousPriceMap);
-                    topGainerMap = sortPriceChangeMap(priceChangeMap, true);
-                    topLoserMap = sortPriceChangeMap(priceChangeMap, false);
-                    database.getReference("topGainerList").setValue(topGainerMap);
-                    database.getReference("topLoserList").setValue(topLoserMap);
-                }
-            }
+        Log.d("TopGainer", "Retrieving closing price list from Firestore...");
+        firestore.collection("closingPriceList").document("prices").get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d("TopGainer", "Closing price list retrieved.");
+                            Map<String, Object> data = document.getData();
+                            previousPriceMap = new LinkedHashMap<>();
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e("TopGainer", "Error retrieving closing price list: " + databaseError.getMessage());
-            }
-        });
+                            if (data != null) {
+                                for (Map.Entry<String, Object> entry : data.entrySet()) {
+                                    if (entry.getValue() instanceof Number) {
+                                        previousPriceMap.put(entry.getKey(), ((Number) entry.getValue()).doubleValue());
+                                    } else {
+                                        Log.e("TopGainer", "Invalid data type for " + entry.getKey());
+                                    }
+                                }
+                            }
+
+                            if (previousPriceMap != null && currentPriceMap != null) {
+                                Log.d("TopGainer", "Calculating top gainers and losers...");
+                                LinkedHashMap<String, StockChange> priceChangeMap = calculatePriceChangeMap(currentPriceMap, previousPriceMap);
+                                topGainerMap = sortPriceChangeMap(priceChangeMap, true);
+                                topLoserMap = sortPriceChangeMap(priceChangeMap, false);
+                                saveTopListsToFirestore("topGainerList", topGainerMap);
+                                saveTopListsToFirestore("topLoserList", topLoserMap);
+                            }
+                        }
+                    } else {
+                        Log.e("TopGainer", "Error retrieving closing price list", task.getException());
+                    }
+                });
     }
+
+
+
+    private void saveTopListsToFirestore(String collectionName, LinkedHashMap<String, StockChange> map) {
+        Log.d("TopGainer", "Saving " + collectionName + " to Firestore...");
+        CollectionReference collectionRef = firestore.collection(collectionName);
+        for (Map.Entry<String, StockChange> entry : map.entrySet()) {
+            Log.d("TopGainer", "Saving " + entry.getKey() + " to " + collectionName);
+            collectionRef.document(entry.getKey()).set(entry.getValue())
+                    .addOnSuccessListener(aVoid -> Log.d("TopGainer", entry.getKey() + " saved in " + collectionName))
+                    .addOnFailureListener(e -> Log.e("TopGainer", "Error saving " + entry.getKey() + " in " + collectionName, e));
+        }
+    }
+
 
     private LinkedHashMap<String, StockChange> calculatePriceChangeMap(LinkedHashMap<String, Double> currentPriceMap, LinkedHashMap<String, Double> previousPriceMap) {
         LinkedHashMap<String, StockChange> priceChangeMap = new LinkedHashMap<>();
@@ -116,6 +160,7 @@ public class TopGainer extends ApiDataRetrieval {
             Double currentPrice = currentPriceEntry.getValue();
             Double previousPrice = previousPriceMap.get(symbol);
             if (previousPrice != null) {
+                Log.d("TopGainer", "Calculating price change for " + symbol);
                 double percentageChange = calculatePercentageChange(currentPrice, previousPrice);
                 StockChange stockChange = new StockChange(symbol, currentPrice, percentageChange);
                 priceChangeMap.put(symbol, stockChange);
@@ -125,11 +170,13 @@ public class TopGainer extends ApiDataRetrieval {
         return priceChangeMap;
     }
 
+
     private double calculatePercentageChange(double currentPrice, double previousPrice) {
         return ((currentPrice - previousPrice) / previousPrice) * 100;
     }
 
     private LinkedHashMap<String, StockChange> sortPriceChangeMap(LinkedHashMap<String, StockChange> priceChangeMap, boolean isAscending) {
+        Log.d("TopGainer", "Sorting price change map " + (isAscending ? "ascending" : "descending") + "...");
         List<Map.Entry<String, StockChange>> list = new LinkedList<>(priceChangeMap.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<String, StockChange>>() {
             @Override
@@ -144,32 +191,36 @@ public class TopGainer extends ApiDataRetrieval {
 
         LinkedHashMap<String, StockChange> sortedMap = new LinkedHashMap<>();
         for (Map.Entry<String, StockChange> entry : list) {
+            Log.d("TopGainer", "Sorted: " + entry.getKey() + " with change: " + entry.getValue().getPercentageChange());
             sortedMap.put(entry.getKey(), entry.getValue());
         }
 
+        Log.d("TopGainer", "Sorting completed.");
         return sortedMap;
     }
+
 
     private long getClosingTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 16);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
-        return calendar.getTimeInMillis();
+        long closingTime = calendar.getTimeInMillis();
+        Log.d("TopGainer", "Calculated closing time: " + closingTime);
+        return closingTime;
     }
+
 
     private long getOpeningTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 9);
         calendar.set(Calendar.MINUTE, 15);
         calendar.set(Calendar.SECOND, 0);
-        return calendar.getTimeInMillis();
+        long openingTime = calendar.getTimeInMillis();
+        Log.d("TopGainer", "Calculated opening time: " + openingTime);
+        return openingTime;
     }
 
-
-//    public void onDataUpdated(List<StockChange> stockChanges) {
-//        // Handle data update
-//    }
 
     public static class StockChange implements Serializable {
         private String symbol;
@@ -180,6 +231,7 @@ public class TopGainer extends ApiDataRetrieval {
             this.symbol = symbol;
             this.currentPrice = currentPrice;
             this.percentageChange = percentageChange;
+            Log.d("TopGainer", "Created StockChange: Symbol=" + symbol + ", CurrentPrice=" + currentPrice + ", PercentageChange=" + percentageChange);
         }
 
         public String getSymbol() {
@@ -194,4 +246,5 @@ public class TopGainer extends ApiDataRetrieval {
             return percentageChange;
         }
     }
+
 }

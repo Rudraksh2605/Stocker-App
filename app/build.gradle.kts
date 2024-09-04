@@ -42,25 +42,28 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
 
-    //Firebase Dependencies
-    implementation(libs.firebase.auth)
-    implementation("com.google.firebase:firebase-bom:33.1.0")
-    implementation("com.google.firebase:firebase-analytics:19.0.2")
-    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    // Firebase Dependencies using BoM
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.firebase:firebase-auth:23.0.0")
-    implementation(libs.firebase.database)
-    implementation(libs.recyclerview)
+    implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-firestore")
+
+    // Google Play Services
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+
+    // Retrofit Dependencies
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation("com.github.denzcoskun:ImageSlideshow:0.1.0")
 
 
-    //Retrofit Dependencies
-    dependencies {
-        implementation("com.squareup.okhttp3:okhttp:4.9.0")
-        implementation("com.squareup.retrofit2:retrofit:2.9.0")
-        implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-        implementation("androidx.recyclerview:recyclerview:1.3.2")
 
-    }
+
+    // AndroidX RecyclerView
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

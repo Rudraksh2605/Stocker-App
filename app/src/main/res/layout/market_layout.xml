@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryBackground"
+    android:background="@color/market_back"
     tools:context=".home.Home_Layout">
 
     <!-- Toolbar -->
@@ -12,40 +12,50 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/primaryColor"
+        android:background="#121212"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
-        <Button
-            android:id="@+id/user"
+        <ImageButton
+            android:id="@+id/back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:background="@drawable/user_button_background"
-            android:text="User"
+            android:layout_gravity="start"
+            android:background="@drawable/imagebuttonback"
+            android:src="@drawable/back"
             android:textColor="@color/white"
             android:textStyle="bold" />
 
     </com.google.android.material.appbar.MaterialToolbar>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider_below_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        app:dividerColor="@color/darkGrey"
+        />
 
     <!-- Search Bar -->
     <EditText
         android:id="@+id/search_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/divider_below_toolbar"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/search_bar_background"
         android:drawablePadding="8dp"
+        android:layout_marginTop="10dp"
         android:hint="Search Stocks"
         android:imeOptions="actionSearch"
         android:paddingStart="16dp"
         android:paddingTop="8dp"
         android:paddingEnd="16dp"
+        android:drawableEnd="@drawable/magnifying_glass"
         android:paddingBottom="8dp"
         android:singleLine="true"
-        android:textColorHint="@color/secondaryText" />
+        android:textColorHint="@color/white"
+        android:fontFamily="@font/roboto_light"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/stock_list"
@@ -54,7 +64,14 @@
         android:layout_marginTop="16dp"
         android:layout_above="@+id/trade_actions"
         android:layout_below="@id/search_edit_text"
-        android:background="@color/primaryBackground" />
+        android:background="@color/market_back" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/trade_actions"
+        app:dividerColor="@color/darkGrey"
+        />
 
     <!-- Trading Actions -->
     <LinearLayout
@@ -64,42 +81,58 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:padding="16dp"
-        android:background="@color/backgroundDark"
+        android:background="@color/market_back"
         android:elevation="8dp">
 
         <!-- Buy Button -->
-        <Button
-            android:id="@+id/buy_button"
+        <ImageButton
+            android:id="@+id/home_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Buy"
             android:textColor="@color/white"
-            android:background="@drawable/button_background"
+            android:src="@drawable/home"
+            android:background="@drawable/imagebuttonback"
+            android:fontFamily="@font/roboto_light"
             android:layout_marginEnd="4dp" />
 
+        <ImageButton
+            android:id="@+id/market_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/trade"
+            android:textColor="@android:color/white"
+            android:background="@drawable/imagebuttonback" />
+
         <!-- Portfolio Button -->
-        <Button
+        <ImageButton
             android:id="@+id/portfolio_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Portfolio"
+            android:fontFamily="@font/roboto_light"
             android:textColor="@color/white"
-            android:background="@drawable/button_background"
+            android:src="@drawable/investment"
+            android:background="@drawable/imagebuttonback"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp" />
 
         <!-- Sell Button -->
-        <Button
-            android:id="@+id/sell_button"
+        <ImageButton
+            android:id="@+id/setting_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Sell"
+            android:text="Setting"
+            android:src="@drawable/settings"
+            android:fontFamily="@font/roboto_light"
             android:textColor="@color/white"
-            android:background="@drawable/button_background"
+            android:background="@drawable/imagebuttonback"
             android:layout_marginStart="4dp" />
+
+
 
     </LinearLayout>
 
