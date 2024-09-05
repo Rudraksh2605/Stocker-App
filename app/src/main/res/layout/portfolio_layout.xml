@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/market_back"
-    tools:context=".home.Home_Layout">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/market_back">
 
-    <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -28,7 +25,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Market"
+            android:text="Portfolio"
             android:background="@color/market_back"
             android:textColor="@color/white"
             android:textSize="20dp"
@@ -36,19 +33,8 @@
             android:layout_marginLeft="30dp"
             />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="Sensex"
-            android:background="@color/market_back"
-            android:textColor="@color/white"
-            android:textSize="18dp"
-            android:fontFamily="@font/roboto_medium"
-            android:layout_marginRight="20dp"
-            />
-
     </com.google.android.material.appbar.MaterialToolbar>
+
 
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider_below_toolbar"
@@ -58,95 +44,77 @@
         app:dividerColor="@color/darkGrey"
         />
 
-    <!-- Search Bar -->
-    <EditText
-        android:id="@+id/search_edit_text"
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_balance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/divider_below_toolbar"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/search_bar_background"
-        android:drawablePadding="8dp"
-        android:layout_marginTop="10dp"
-        android:hint="Search Stocks"
-        android:imeOptions="actionSearch"
-        android:paddingStart="16dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="16dp"
-        android:drawableEnd="@drawable/magnifying_glass"
-        android:paddingBottom="8dp"
-        android:singleLine="true"
-        android:textColorHint="@color/white"
-        android:fontFamily="@font/roboto_light"/>
+        android:layout_margin="8dp"
+        app:cardCornerRadius="10dp"
+        android:background="@drawable/cardview_border"
+        android:backgroundTint="@color/market_back"
+        >
 
-
-
-
-    <LinearLayout
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/market_back"
-        android:layout_below="@+id/search_edit_text">
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:background="@color/market_back"
-            >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Comapny"
-                android:id="@+id/text_company"
-                android:background="@color/market_back"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:fontFamily="@font/roboto_light"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="8dp"
-                />
+            android:layout_gravity="center"
+            android:padding="16dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Price"
-                android:layout_below="@id/search_edit_text"
-                android:layout_alignEnd="@+id/text_company"
-                android:background="@color/market_back"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:fontFamily="@font/roboto_light"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
-                />
-            <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/divider_below_search"
+                android:id="@+id/text_balance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:dividerColor="@color/darkGrey"
-                android:layout_below="@+id/text_company"
-                android:layout_marginTop="8dp"/>
+                android:text="Balance"
+                android:fontFamily="@font/roboto_light"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:background="@color/market_back"
+                android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/balance_portfolio"
+                android:text="10,00,000"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_balance"
+                android:textSize="30dp"
+                android:fontFamily="@font/roboto_light"
+                android:background="@color/market_back"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:gravity="center"/>
+
+
+
+            <TextView
+                android:id="@+id/balance_percentage_gain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/green"
+                android:fontFamily="@font/roboto_light"
+                android:background="@color/market_back"
+                android:gravity="center"
+                android:layout_below="@id/balance_portfolio"
+                android:text="0.00%"
+                android:textSize="16sp" />
 
         </RelativeLayout>
-
-
-    </LinearLayout>
-
-            
-
+    </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/stock_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
-        android:layout_above="@+id/trade_actions"
-        android:layout_below="@id/text"
-        android:background="@color/market_back" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/card_balance"
+        android:background="@color/market_back"
+        android:layout_above="@id/trade_actions"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
@@ -155,7 +123,7 @@
         app:dividerColor="@color/darkGrey"
         />
 
-    <!-- Trading Actions -->
+
     <LinearLayout
         android:id="@+id/trade_actions"
         android:layout_width="match_parent"
@@ -219,5 +187,9 @@
             android:textStyle="bold" />
 
     </LinearLayout>
+
+
+
+
 
 </RelativeLayout>

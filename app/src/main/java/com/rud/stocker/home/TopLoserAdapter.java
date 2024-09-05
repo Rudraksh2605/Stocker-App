@@ -54,5 +54,7 @@ public class TopLoserAdapter extends RecyclerView.Adapter<TopLoserAdapter.ViewHo
             percentageGain = itemView.findViewById(R.id.percentage_gain);
         }
     }
+
+
 }
 

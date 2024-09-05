@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/market_back"/> <!-- Background color of the CardView -->
+    <stroke
+        android:width="2dp"
+        android:color="@color/darkGrey" /> <!-- Border color -->
+    <corners android:radius="10dp"/> <!-- Corner radius should match the CardView's corner radius -->
+</shape>

@@ -38,10 +38,11 @@ public class TopGainerAdapter extends RecyclerView.Adapter<TopGainerAdapter.View
         return stockChanges.size();
     }
 
-    public void setStockChanges(List<TopGainer.StockChange> stockChanges) {
-        this.stockChanges = stockChanges;
+    public void setTopGainers(List<TopGainer.StockChange> topGainers) {
+        this.stockChanges = topGainers;
         notifyDataSetChanged();
     }
+
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView stockName;

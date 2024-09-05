@@ -36,6 +36,9 @@
         <activity
             android:name="com.rud.stocker.auth.Email_Registration"
             android:exported="true" />
+        <activity
+            android:name="com.rud.stocker.Portfolio.Portfolio_Layout"
+            android:exported="true" />
     </application>
 
 </manifest>

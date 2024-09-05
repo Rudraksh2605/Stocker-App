@@ -11,9 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.denzcoskun.imageslider.ImageSlider;
-import com.denzcoskun.imageslider.constants.ScaleTypes;
-import com.denzcoskun.imageslider.models.SlideModel;
 import com.rud.stocker.Order.Order_Layout;
 import com.rud.stocker.Portfolio.Portfolio_Layout;
 import com.rud.stocker.R;
@@ -126,7 +123,7 @@ public class Home_Layout extends AppCompatActivity {
     }
 
     public void onDataUpdated(List<TopGainer.StockChange> stockChanges) {
-        topGainerAdapter.setStockChanges(stockChanges);
+        topGainerAdapter.setTopGainers(stockChanges);
         List<TopGainer.StockChange> reversedList = new ArrayList<>(stockChanges);
         Collections.reverse(reversedList);
         topLoserAdapter.setStockChanges(reversedList);

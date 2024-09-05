@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="STOCKER"
+            android:text="Stocker"
             android:background="@color/market_back"
             android:textColor="@color/white"
             android:textSize="25dp"
@@ -140,6 +140,16 @@
             android:layout_marginRight="8dp"
             android:background="@drawable/imagebuttonback" />
 
+        <ImageButton
+            android:id="@+id/home_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/imagebuttonback"
+            android:src="@drawable/home"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
         <!-- Portfolio Button -->
         <ImageButton
             android:id="@+id/portfolio_button"
@@ -160,6 +170,8 @@
             android:src="@drawable/settings"
             android:textColor="@color/white"
             android:textStyle="bold" />
+
+
 
     </LinearLayout>
 </RelativeLayout>

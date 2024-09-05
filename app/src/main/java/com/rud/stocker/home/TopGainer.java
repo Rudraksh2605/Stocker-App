@@ -1,7 +1,7 @@
 package com.rud.stocker.home;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.sql.*;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -11,56 +11,62 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.rud.stocker.MySqlDatabase.DatabaseUtil;
 import com.rud.stocker.api.ApiDataRetrieval;
 import com.rud.stocker.api.ApiResponseItem;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import android.util.Log;
 
 public class TopGainer extends ApiDataRetrieval {
-    private FirebaseFirestore firestore;
     private LinkedHashMap<String, Double> currentPriceMap;
     private LinkedHashMap<String, Double> previousPriceMap;
     private LinkedHashMap<String, StockChange> topGainerMap;
     private LinkedHashMap<String, StockChange> topLoserMap;
+    private ExecutorService executorService;
 
     public TopGainer() {
-        firestore = FirebaseFirestore.getInstance();
+        executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(() -> createDatabaseAndTables()); // Create database and tables if they don't exist
+    }
+
+    // Method to create database and tables
+    private void createDatabaseAndTables() {
+        try (Connection connection = DatabaseUtil.getConnection();
+             Statement statement = connection.createStatement()) {
+
+            String createCurrentPriceTable = "CREATE TABLE IF NOT EXISTS currentPriceList (symbol VARCHAR(10) PRIMARY KEY, price DOUBLE)";
+            statement.execute(createCurrentPriceTable);
+
+            String createClosingPriceTable = "CREATE TABLE IF NOT EXISTS closingPriceList (symbol VARCHAR(10) PRIMARY KEY, price DOUBLE)";
+            statement.execute(createClosingPriceTable);
+
+            String createTopGainerTable = "CREATE TABLE IF NOT EXISTS topGainerList (symbol VARCHAR(10) PRIMARY KEY, currentPrice DOUBLE, percentageChange DOUBLE)";
+            statement.execute(createTopGainerTable);
+
+            String createTopLoserTable = "CREATE TABLE IF NOT EXISTS topLoserList (symbol VARCHAR(10) PRIMARY KEY, currentPrice DOUBLE, percentageChange DOUBLE)";
+            statement.execute(createTopLoserTable);
+
+        } catch (SQLException e) {
+            Log.e("TopGainer", "Error creating database or tables", e);
+        }
     }
 
     public void start() {
         Log.d("TopGainer", "Starting the process...");
 
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Log.d("TopGainer", "Saving closing prices...");
-                saveClosingPriceList();
-            }
-        }, getClosingTime());
-
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Log.d("TopGainer", "Calculating top gainers and losers...");
-                calculateTopGainersAndLosers();
-            }
-        }, getOpeningTime());
-
+        // Update prices and calculate top gainers/losers every minute
         Timer minuteTimer = new Timer();
         minuteTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                Log.d("TopGainer", "Updating current prices...");
+                Log.d("TopGainer", "Updating current prices and calculating top gainers/losers...");
                 updateCurrentPrices();
             }
-        }, 0, 60000);
+        }, 0, 60000); // Update every minute
     }
-
 
     public void updateCurrentPrices() {
         Log.d("TopGainer", "Fetching current prices from API...");
@@ -68,89 +74,78 @@ public class TopGainer extends ApiDataRetrieval {
         apiDataRetrieval.startRealtimeUpdates(new ApiDataCallback() {
             @Override
             public void onDataFetched(List<ApiResponseItem> apiDataModels) {
-                Log.d("TopGainer", "API data fetched.");
+                Log.d("TopGainer", "API data fetched. Size: " + apiDataModels.size());
             }
 
             public void onDataRetrieved(LinkedHashMap<String, Double> data) {
-                Log.d("TopGainer", "Current prices retrieved.");
+                Log.d("TopGainer", "Current prices retrieved. Size: " + data.size());
                 currentPriceMap = data;
-                firestore.collection("currentPriceList").document("prices").set(currentPriceMap)
-                        .addOnSuccessListener(aVoid -> Log.d("TopGainer", "Current prices updated in Firestore"))
-                        .addOnFailureListener(e -> Log.e("TopGainer", "Error updating current prices", e));
+                updateCurrentPricesInDatabase(currentPriceMap);
+                calculateTopGainersAndLosers();
             }
         });
     }
 
+    private void updateCurrentPricesInDatabase(LinkedHashMap<String, Double> prices) {
+        String query = "REPLACE INTO currentPriceList (symbol, price) VALUES (?, ?)";
 
-    private void saveClosingPriceList() {
-        Log.d("TopGainer", "Fetching closing prices from API...");
-        ApiDataRetrieval apiDataRetrieval = new ApiDataRetrieval();
-        apiDataRetrieval.startRealtimeUpdates(new ApiDataCallback() {
-            @Override
-            public void onDataFetched(List<ApiResponseItem> apiDataModels) {
-                Log.d("TopGainer", "API data fetched.");
+        try (Connection connection = DatabaseUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            for (Map.Entry<String, Double> entry : prices.entrySet()) {
+                preparedStatement.setString(1, entry.getKey());
+                preparedStatement.setDouble(2, entry.getValue());
+                preparedStatement.addBatch();
             }
-
-            public void onDataFetched(LinkedHashMap<String, Double> data) {
-                Log.d("TopGainer", "Closing prices retrieved.");
-                currentPriceMap = data;
-                firestore.collection("closingPriceList").document("prices").set(currentPriceMap)
-                        .addOnSuccessListener(avoid -> Log.d("TopGainer", "Closing prices saved in Firestore"))
-                        .addOnFailureListener(e -> Log.e("TopGainer", "Error saving closing prices", e));
-            }
-        });
+            int[] affectedRows = preparedStatement.executeBatch();
+            Log.d("TopGainer", "Current prices updated in MySQL. Affected rows: " + affectedRows.length);
+        } catch (SQLException e) {
+            Log.e("TopGainer", "Error updating current prices in MySQL", e);
+        }
     }
 
 
     private void calculateTopGainersAndLosers() {
-        Log.d("TopGainer", "Retrieving closing price list from Firestore...");
-        firestore.collection("closingPriceList").document("prices").get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            Log.d("TopGainer", "Closing price list retrieved.");
-                            Map<String, Object> data = document.getData();
-                            previousPriceMap = new LinkedHashMap<>();
+        Log.d("TopGainer", "Retrieving closing price list from MySQL...");
+        String query = "SELECT symbol, price FROM closingPriceList";
 
-                            if (data != null) {
-                                for (Map.Entry<String, Object> entry : data.entrySet()) {
-                                    if (entry.getValue() instanceof Number) {
-                                        previousPriceMap.put(entry.getKey(), ((Number) entry.getValue()).doubleValue());
-                                    } else {
-                                        Log.e("TopGainer", "Invalid data type for " + entry.getKey());
-                                    }
-                                }
-                            }
+        try (Connection connection = DatabaseUtil.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
 
-                            if (previousPriceMap != null && currentPriceMap != null) {
-                                Log.d("TopGainer", "Calculating top gainers and losers...");
-                                LinkedHashMap<String, StockChange> priceChangeMap = calculatePriceChangeMap(currentPriceMap, previousPriceMap);
-                                topGainerMap = sortPriceChangeMap(priceChangeMap, true);
-                                topLoserMap = sortPriceChangeMap(priceChangeMap, false);
-                                saveTopListsToFirestore("topGainerList", topGainerMap);
-                                saveTopListsToFirestore("topLoserList", topLoserMap);
-                            }
-                        }
-                    } else {
-                        Log.e("TopGainer", "Error retrieving closing price list", task.getException());
-                    }
-                });
-    }
-
-
-
-    private void saveTopListsToFirestore(String collectionName, LinkedHashMap<String, StockChange> map) {
-        Log.d("TopGainer", "Saving " + collectionName + " to Firestore...");
-        CollectionReference collectionRef = firestore.collection(collectionName);
-        for (Map.Entry<String, StockChange> entry : map.entrySet()) {
-            Log.d("TopGainer", "Saving " + entry.getKey() + " to " + collectionName);
-            collectionRef.document(entry.getKey()).set(entry.getValue())
-                    .addOnSuccessListener(aVoid -> Log.d("TopGainer", entry.getKey() + " saved in " + collectionName))
-                    .addOnFailureListener(e -> Log.e("TopGainer", "Error saving " + entry.getKey() + " in " + collectionName, e));
+            previousPriceMap = new LinkedHashMap<>();
+            while (resultSet.next()) {
+                previousPriceMap.put(resultSet.getString("symbol"), resultSet.getDouble("price"));
+            }
+            if (previousPriceMap != null && currentPriceMap != null) {
+                Log.d("TopGainer", "Calculating top gainers and losers...");
+                LinkedHashMap<String, StockChange> priceChangeMap = calculatePriceChangeMap(currentPriceMap, previousPriceMap);
+                topGainerMap = sortPriceChangeMap(priceChangeMap, true);
+                topLoserMap = sortPriceChangeMap(priceChangeMap, false);
+                saveTopListsToDatabase("topGainerList", topGainerMap);
+                saveTopListsToDatabase("topLoserList", topLoserMap);
+            }
+        } catch (SQLException e) {
+            Log.e("TopGainer", "Error retrieving closing price list from MySQL", e);
         }
     }
 
+    private void saveTopListsToDatabase(String tableName, LinkedHashMap<String, StockChange> map) {
+        String query = "REPLACE INTO " + tableName + " (symbol, currentPrice, percentageChange) VALUES (?, ?, ?)";
+
+        try (Connection connection = DatabaseUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            for (Map.Entry<String, StockChange> entry : map.entrySet()) {
+                preparedStatement.setString(1, entry.getKey());
+                preparedStatement.setDouble(2, entry.getValue().getCurrentPrice());
+                preparedStatement.setDouble(3, entry.getValue().getPercentageChange());
+                preparedStatement.addBatch();
+            }
+            int[] affectedRows = preparedStatement.executeBatch();
+            Log.d("TopGainer", "Top list updated in MySQL: " + tableName + ". Affected rows: " + affectedRows.length);
+        } catch (SQLException e) {
+            Log.e("TopGainer", "Error saving to MySQL: " + tableName, e);
+        }
+    }
 
     private LinkedHashMap<String, StockChange> calculatePriceChangeMap(LinkedHashMap<String, Double> currentPriceMap, LinkedHashMap<String, Double> previousPriceMap) {
         LinkedHashMap<String, StockChange> priceChangeMap = new LinkedHashMap<>();
@@ -169,7 +164,6 @@ public class TopGainer extends ApiDataRetrieval {
 
         return priceChangeMap;
     }
-
 
     private double calculatePercentageChange(double currentPrice, double previousPrice) {
         return ((currentPrice - previousPrice) / previousPrice) * 100;
@@ -199,29 +193,6 @@ public class TopGainer extends ApiDataRetrieval {
         return sortedMap;
     }
 
-
-    private long getClosingTime() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 16);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        long closingTime = calendar.getTimeInMillis();
-        Log.d("TopGainer", "Calculated closing time: " + closingTime);
-        return closingTime;
-    }
-
-
-    private long getOpeningTime() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 9);
-        calendar.set(Calendar.MINUTE, 15);
-        calendar.set(Calendar.SECOND, 0);
-        long openingTime = calendar.getTimeInMillis();
-        Log.d("TopGainer", "Calculated opening time: " + openingTime);
-        return openingTime;
-    }
-
-
     public static class StockChange implements Serializable {
         private String symbol;
         private double currentPrice;
@@ -246,5 +217,4 @@ public class TopGainer extends ApiDataRetrieval {
             return percentageChange;
         }
     }
-
 }

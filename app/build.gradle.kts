@@ -47,7 +47,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database")
-    implementation("com.google.firebase:firebase-firestore")
+
 
     // Google Play Services
     implementation("com.google.android.gms:play-services-auth:21.2.0")
@@ -57,7 +57,8 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    implementation("com.github.denzcoskun:ImageSlideshow:0.1.0")
+    // MySql
+    implementation("mysql:mysql-connector-java:5.1.49")
 
 
 

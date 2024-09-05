@@ -20,9 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.denzcoskun.imageslider.ImageSlider;
-import com.denzcoskun.imageslider.constants.ScaleTypes;
-import com.denzcoskun.imageslider.models.SlideModel;
+import com.rud.stocker.Order.Order_Layout;
 import com.rud.stocker.Portfolio.Portfolio_Layout;
 import com.rud.stocker.R;
 import com.rud.stocker.Settings.Setting_Layout;
@@ -49,6 +47,7 @@ public class MarketLayoutActivity extends AppCompatActivity {
     private ImageButton portbtn;
     private ImageButton settingbtn;
     private ImageButton backbtn;
+    private ImageButton orderButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +58,7 @@ public class MarketLayoutActivity extends AppCompatActivity {
         portbtn = findViewById(R.id.portfolio_button);
         settingbtn = findViewById(R.id.setting_button);
         backbtn = findViewById(R.id.back_button);
+        orderButton = findViewById(R.id.order_button);
 
         recyclerView = findViewById(R.id.stock_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -93,12 +93,24 @@ public class MarketLayoutActivity extends AppCompatActivity {
             }
         });
 
+        orderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Start the Order activity here
+                startActivity(new Intent(getApplicationContext(), Order_Layout.class));
+            }
+        });
+
+
+
         backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), Home_Layout.class));
             }
         });
+
+
 
 
 
