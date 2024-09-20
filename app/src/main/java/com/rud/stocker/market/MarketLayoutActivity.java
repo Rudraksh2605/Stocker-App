@@ -1,5 +1,7 @@
 package com.rud.stocker.market;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -27,6 +29,7 @@ import com.rud.stocker.Settings.Setting_Layout;
 import com.rud.stocker.api.ApiDataRetrieval;
 import com.rud.stocker.api.ApiResponseItem;
 import com.rud.stocker.home.Home_Layout;
+import com.rud.stocker.purchase_window.StockDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -252,13 +255,46 @@ public class MarketLayoutActivity extends AppCompatActivity {
             return new ViewHolder(view);
         }
 
+
+
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             ApiResponseItem stock = stockList.get(position);
             holder.symbolTextView.setText(stock.getSymbol());
             holder.nameTextView.setText(stock.getNameOfCompany());
             holder.priceTextView.setText(stock.getCurrentPrice());
+
+            // Set up onClickListener for the item
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Create a simple Dialog to show stock details as a popup
+                    Dialog dialog = new Dialog(v.getContext());
+                    LayoutInflater inflater = LayoutInflater.from(v.getContext());
+
+                    // Inflate the custom layout for the dialog
+                    View dialogView = inflater.inflate(R.layout.activity_stock_details, null);
+
+                    // Set stock details into the dialog
+                    TextView dialogSymbol = dialogView.findViewById(R.id.symbolTextView);
+                    TextView dialogName = dialogView.findViewById(R.id.nameTextView);
+                    TextView dialogPrice = dialogView.findViewById(R.id.priceTextView);
+
+                    dialogSymbol.setText(stock.getSymbol());
+                    dialogName.setText(stock.getNameOfCompany());
+                    dialogPrice.setText(stock.getCurrentPrice());
+
+                    // Set the custom view for the dialog
+                    dialog.setContentView(dialogView);
+
+                    // Show the dialog
+                    dialog.show();
+                }
+            });
         }
+
+
+
 
         @Override
         public int getItemCount() {

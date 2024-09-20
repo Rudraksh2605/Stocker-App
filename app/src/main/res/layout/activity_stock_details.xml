@@ -1,0 +1,164 @@
+<!-- res/layout/activity_stock_details.xml -->
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    app:background="@drawable/rounded_card_background"
+    app:cardElevation="10dp"
+    app:cardCornerRadius="20dp"
+    android:padding="16dp"
+    android:minWidth="200dp"
+    android:minHeight="200dp"> <!-- Adds a subtle shadow for depth -->
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/market_back"
+
+        android:gravity="center_vertical"
+        android:minHeight="250dp"
+        android:minWidth="200dp">
+
+        <TextView
+            android:id="@+id/nameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:background="@color/market_back"
+            android:fontFamily="@font/roboto_light"
+            android:text="Name"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/symbolLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:background="@color/market_back"
+            android:gravity="center_vertical"
+            android:layout_below="@id/nameTextView"
+            android:layout_marginTop="18dp">
+
+            <TextView
+                android:id="@+id/Symbol_Text"
+                android:layout_width="wrap_content"
+                android:background="@color/market_back"
+                android:text="Symbol"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:fontFamily="@font/roboto_light"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/symbolTextView"
+                android:layout_width="wrap_content"
+                android:background="@color/market_back"
+                android:text="20"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:fontFamily="@font/roboto_light"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/priceLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:background="@color/market_back"
+            android:gravity="center_vertical"
+            android:layout_below="@id/symbolLayout"
+            android:layout_marginTop="18dp">
+
+            <TextView
+                android:id="@+id/Price_Text"
+                android:layout_width="wrap_content"
+                android:background="@color/market_back"
+                android:text="Price"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:fontFamily="@font/roboto_light"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/priceTextView"
+                android:layout_width="wrap_content"
+                android:background="@color/market_back"
+                android:text="20"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:fontFamily="@font/roboto_light"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:dividerColor="@color/darkGrey"
+            android:layout_below="@id/priceLayout"
+            android:layout_marginTop="25dp"/>
+
+        <!-- Buttons Layout -->
+        <LinearLayout
+            android:id="@+id/buttonsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider"
+            android:layout_marginTop="15dp"
+            android:background="@color/market_back"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:backgroundTint="@android:color/white"
+                android:fontFamily="@font/roboto_medium"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:text="BUY"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/sellButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:backgroundTint="@android:color/white"
+                android:fontFamily="@font/roboto_medium"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:text="SELL"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

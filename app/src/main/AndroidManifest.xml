@@ -39,6 +39,10 @@
         <activity
             android:name="com.rud.stocker.Portfolio.Portfolio_Layout"
             android:exported="true" />
+
+        <activity
+            android:name="com.rud.stocker.purchase_window.StockDetailsActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
