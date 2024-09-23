@@ -2,124 +2,255 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     app:background="@drawable/rounded_card_background"
-    app:cardElevation="10dp"
-    app:cardCornerRadius="20dp"
+    app:cardElevation="100dp"
+    app:cardCornerRadius="10dp"
     android:padding="16dp"
-    android:minWidth="200dp"
-    android:minHeight="200dp"> <!-- Adds a subtle shadow for depth -->
+    android:minWidth="150dp"
+    android:minHeight="300dp">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/market_back"
-
         android:gravity="center_vertical"
-        android:minHeight="250dp"
-        android:minWidth="200dp">
+        android:minWidth="150dp"
+        android:minHeight="300dp">
 
         <TextView
             android:id="@+id/nameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:gravity="center"
             android:background="@color/market_back"
             android:fontFamily="@font/roboto_light"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginTop="15dp"
             android:text="Name"
             android:textColor="@color/white"
             android:textSize="20dp"
-            android:layout_marginTop="10dp"
             android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/symbolLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:layout_below="@id/nameTextView"
+            android:layout_marginTop="18dp"
             android:background="@color/market_back"
             android:gravity="center_vertical"
-            android:layout_below="@id/nameTextView"
-            android:layout_marginTop="18dp">
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
 
             <TextView
                 android:id="@+id/Symbol_Text"
                 android:layout_width="wrap_content"
-                android:background="@color/market_back"
-                android:text="Symbol"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
+                android:layout_marginTop="4dp"
+                android:background="@color/market_back"
                 android:fontFamily="@font/roboto_light"
-                android:layout_marginTop="4dp" />
+                android:text="Symbol"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/symbolTextView"
                 android:layout_width="wrap_content"
-                android:background="@color/market_back"
-                android:text="20"
-                android:layout_weight="1"
-                android:gravity="end"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
+                android:layout_marginTop="4dp"
+                android:background="@color/market_back"
                 android:fontFamily="@font/roboto_light"
-                android:layout_marginTop="4dp" />
+                android:gravity="end"
+                android:text="20"
+                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                 />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/priceLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:layout_below="@id/symbolLayout"
+            android:layout_marginTop="18dp"
             android:background="@color/market_back"
             android:gravity="center_vertical"
-            android:layout_below="@id/symbolLayout"
-            android:layout_marginTop="18dp">
+            android:weightSum="2"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
 
             <TextView
                 android:id="@+id/Price_Text"
                 android:layout_width="wrap_content"
-                android:background="@color/market_back"
-                android:text="Price"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:layout_weight="1"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
+                android:background="@color/market_back"
                 android:fontFamily="@font/roboto_light"
-                android:layout_marginTop="4dp" />
+                android:text="Price"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/priceTextView"
                 android:layout_width="wrap_content"
-                android:background="@color/market_back"
-                android:text="20"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
+                android:layout_marginTop="4dp"
+                android:background="@color/market_back"
                 android:fontFamily="@font/roboto_light"
-                android:layout_marginTop="4dp" />
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="20"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                 />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/quantityLayout"
+            android:layout_below="@id/priceLayout"
+            android:layout_marginTop="18dp"
+            android:background="@color/market_back"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:weightSum="2"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:text="Quantity"
+                android:textColor="@color/white"
+                android:background="@color/market_back"
+                android:textSize="18sp"
+                android:fontFamily="@font/roboto_light"
+                android:textStyle="bold"
+                android:layout_weight="1">
+            </TextView>
+
+            <EditText
+                android:id="@+id/quantityEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:text="0"
+                android:textColor="@color/white"
+                android:inputType="number"
+                android:background="@color/market_back"
+                android:textSize="18sp"
+                android:fontFamily="@font/roboto_light"
+                android:gravity="end"
+                android:layout_weight="1">
+            </EditText>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/TypeLayout"
+            android:layout_below="@id/AmountLayout"
+            android:layout_marginTop="18dp"
+            android:background="@color/market_back"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:weightSum="2"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:text="Type"
+                android:textColor="@color/white"
+                android:background="@color/market_back"
+                android:textSize="18sp"
+                android:fontFamily="@font/roboto_light"
+                android:textStyle="bold"
+                android:layout_weight="1">
+            </TextView>
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:text="Delivery"
+                android:textColor="@color/white"
+                android:background="@color/market_back"
+                android:textSize="18sp"
+                android:fontFamily="@font/roboto_light"
+                android:gravity="end"
+
+                android:layout_weight="1">
+            </TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/AmountLayout"
+            android:layout_below="@id/quantityLayout"
+            android:layout_marginTop="18dp"
+            android:background="@color/market_back"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:weightSum="2"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:text="Amount"
+                android:textColor="@color/white"
+                android:background="@color/market_back"
+                android:textSize="18sp"
+                android:fontFamily="@font/roboto_light"
+                android:textStyle="bold"
+                android:layout_weight="1">
+            </TextView>
+
+            <TextView
+                android:id="@+id/total_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:text="0"
+                android:textColor="@color/white"
+                android:background="@color/market_back"
+                android:textSize="18sp"
+                android:fontFamily="@font/roboto_light"
+                android:gravity="end"
+                android:layout_weight="1">
+            </TextView>
+
+        </LinearLayout>
+
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:dividerColor="@color/darkGrey"
-            android:layout_below="@id/priceLayout"
-            android:layout_marginTop="25dp"/>
+            android:layout_below="@id/TypeLayout"
+            android:layout_marginTop="25dp"
+            app:dividerColor="@color/darkGrey" />
 
         <!-- Buttons Layout -->
         <LinearLayout
@@ -130,34 +261,48 @@
             android:layout_marginTop="15dp"
             android:background="@color/market_back"
             android:gravity="center_horizontal"
+            android:weightSum="2"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_marginBottom="15dp"
             android:orientation="horizontal">
 
-            <Button
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/sellButton"
+                android:layout_width="wrap_content"
+                android:clickable="true"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/roboto_medium"
+                android:paddingLeft="20dp"
+                android:focusableInTouchMode="true"
+                android:paddingRight="20dp"
+                android:text="SELL"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buyButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:backgroundTint="@android:color/white"
+                android:clickable="true"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="@color/white"
                 android:fontFamily="@font/roboto_medium"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
+                android:focusableInTouchMode="true"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
                 android:text="BUY"
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
-
-            <Button
-                android:id="@+id/sellButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:backgroundTint="@android:color/white"
-                android:fontFamily="@font/roboto_medium"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
-                android:text="SELL"
-                android:textColor="@android:color/black"
-                android:textSize="14sp" />
         </LinearLayout>
+
 
     </RelativeLayout>
 

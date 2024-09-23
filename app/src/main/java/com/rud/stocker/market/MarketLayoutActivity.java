@@ -1,6 +1,5 @@
 package com.rud.stocker.market;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -22,6 +22,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+import com.rud.stocker.Database.database;
 import com.rud.stocker.Order.Order_Layout;
 import com.rud.stocker.Portfolio.Portfolio_Layout;
 import com.rud.stocker.R;
@@ -29,7 +36,6 @@ import com.rud.stocker.Settings.Setting_Layout;
 import com.rud.stocker.api.ApiDataRetrieval;
 import com.rud.stocker.api.ApiResponseItem;
 import com.rud.stocker.home.Home_Layout;
-import com.rud.stocker.purchase_window.StockDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +57,8 @@ public class MarketLayoutActivity extends AppCompatActivity {
     private ImageButton settingbtn;
     private ImageButton backbtn;
     private ImageButton orderButton;
+    private FirebaseFirestore firebaseFirestore;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +81,10 @@ public class MarketLayoutActivity extends AppCompatActivity {
         searchStock = new SearchStock();
 
         stockMap = new HashMap<>();
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+
 
         //Buttons
         homebtn.setOnClickListener(new View.OnClickListener() {
@@ -268,7 +280,7 @@ public class MarketLayoutActivity extends AppCompatActivity {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Create a simple Dialog to show stock details as a popup
+                    // Create a dialog to show stock details as a popup
                     Dialog dialog = new Dialog(v.getContext());
                     LayoutInflater inflater = LayoutInflater.from(v.getContext());
 
@@ -279,21 +291,119 @@ public class MarketLayoutActivity extends AppCompatActivity {
                     TextView dialogSymbol = dialogView.findViewById(R.id.symbolTextView);
                     TextView dialogName = dialogView.findViewById(R.id.nameTextView);
                     TextView dialogPrice = dialogView.findViewById(R.id.priceTextView);
+                    EditText dialogQuantity = dialogView.findViewById(R.id.quantityEditText);
+                    TextView dialogTotalAmount = dialogView.findViewById(R.id.total_amount);
+                    Button buyButton = dialogView.findViewById(R.id.buyButton);
+                    Button sellButton = dialogView.findViewById(R.id.sellButton);
 
+                    // Set values in the dialog
                     dialogSymbol.setText(stock.getSymbol());
                     dialogName.setText(stock.getNameOfCompany());
                     dialogPrice.setText(stock.getCurrentPrice());
 
-                    // Set the custom view for the dialog
-                    dialog.setContentView(dialogView);
+                    // Set up text watcher to calculate total amount
+                    dialogQuantity.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            // Intentionally left blank
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            calculateTotalAmount(dialogQuantity, dialogPrice, dialogTotalAmount);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            calculateTotalAmount(dialogQuantity, dialogPrice, dialogTotalAmount);
+                        }
+                    });
+
+                    // Buy button logic
+                    buyButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            performStockAction("buy", stock.getSymbol(), stock.getNameOfCompany(), stock.getCurrentPrice(), dialogQuantity.getText().toString(), dialogTotalAmount.getText().toString());
+                            dialog.dismiss(); // Close the dialog after action
+                        }
+                    });
+
+                    // Sell button logic
+                    sellButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            performStockAction("sell", stock.getSymbol(), stock.getNameOfCompany(), stock.getCurrentPrice(), dialogQuantity.getText().toString(), dialogTotalAmount.getText().toString());
+                            dialog.dismiss(); // Close the dialog after action
+                        }
+                    });
 
                     // Show the dialog
+                    dialog.setContentView(dialogView);
+                    dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.rounded_card_background));
                     dialog.show();
                 }
             });
         }
 
+        private String calculateTotalAmount(EditText quantityEditText, TextView priceTextView, TextView totalAmountTextView) {
+            String quantityStr = quantityEditText.getText().toString();
+            String strtotalAmount = "0" ;
+            if (!quantityStr.isEmpty()) {
+                int quantityValue = Integer.parseInt(quantityStr);
+                double priceValue = Double.parseDouble(priceTextView.getText().toString());
+                double totalAmount = priceValue * quantityValue;
+                totalAmountTextView.setText(String.format("%.2f", totalAmount));
+                strtotalAmount = String.format("%.2f", totalAmount);;
 
+            } else {
+                totalAmountTextView.setText("");
+            }
+
+            return strtotalAmount;
+        }
+
+        private void performStockAction(String action, String symbol, String companyName, String BuyPrice, String quantity, String totalAmount) {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            database db = new database();
+
+            if (user != null) {
+                if (quantity.isEmpty() || Integer.parseInt(quantity) <= 0) {
+                    Toast.makeText(MarketLayoutActivity.this, "Quantity must be greater than 0", Toast.LENGTH_SHORT).show();
+                    return; // Exit the function without placing the order
+                }
+
+                String email = user.getEmail();
+                Map<String, Object> stock = new HashMap<>();
+                stock.put("symbol", symbol);
+                stock.put("companyName", companyName);
+                stock.put("BuyPrice", BuyPrice);
+                stock.put("quantity", quantity);
+                stock.put("totalAmount", totalAmount);
+
+                // Reference to the user's document
+                DocumentReference userDocRef = firebaseFirestore.collection("users").document(email);
+
+                // Use set() with merge option to create the document if it doesn't exist
+                userDocRef.set(new HashMap<>(), SetOptions.merge())
+                        .addOnSuccessListener(aVoid -> {
+                            Log.d("Firestore", "User document created or merged successfully");
+
+                            if ("buy".equals(action)) {
+                                // Add the stock to the user's portfolio in Firestore
+                                userDocRef.update("Portfolio", FieldValue.arrayUnion(stock))
+                                        .addOnSuccessListener(aVoid1 -> Log.d("Firestore", "Stock bought and added to portfolio"))
+                                        .addOnFailureListener(e -> Log.e("Firestore", "Error adding stock", e));
+
+                            } else if ("sell".equals(action)) {
+                                // Remove the stock from the user's portfolio in Firestore
+                                userDocRef.update("Portfolio", FieldValue.arrayRemove(stock))
+                                        .addOnSuccessListener(aVoid1 -> Log.d("Firestore", "Stock sold and removed from portfolio"))
+                                        .addOnFailureListener(e -> Log.e("Firestore", "Error removing stock", e));
+                            }
+                        })
+                        .addOnFailureListener(e -> Log.e("Firestore", "Error creating or merging user document", e));
+            }
+        }
 
 
         @Override

@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.rud.stocker.Database.database;
 import com.rud.stocker.Order.Order_Layout;
 import com.rud.stocker.R;
 import com.rud.stocker.Settings.Setting_Layout;
@@ -32,6 +33,13 @@ public class Portfolio_Layout extends AppCompatActivity {
         settingButton = findViewById(R.id.setting_button);
         backbtn = findViewById(R.id.back_button);
         homebtn = findViewById(R.id.home_button);
+
+        database db = new database();
+        db.Database();
+        db.createUserData();
+        db.updateTotalAnount();
+        db.updateCurrent();
+        db.updateProfit();
 
         marketButton.setOnClickListener(new View.OnClickListener() {
             @Override

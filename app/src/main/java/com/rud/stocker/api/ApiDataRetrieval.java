@@ -41,12 +41,6 @@ public class ApiDataRetrieval {
         }, 0, 60000);
     }
 
-    public void stopRealtimeUpdates() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-    }
 
     private void fetchData() {
         Call<List<ApiResponseItem>> call = apiInterface.getData();
@@ -80,7 +74,4 @@ public class ApiDataRetrieval {
         void onDataFetched(List<ApiResponseItem> apiDataModels);
     }
 
-    public  void retrieveData() {
-        fetchData();
-    }
 }
