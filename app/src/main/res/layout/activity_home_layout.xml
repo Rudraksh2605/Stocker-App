@@ -24,6 +24,12 @@
             android:layout_gravity="start"
             />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/stocker_name"
+            />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -115,63 +121,137 @@
         android:padding="16dp"
         android:background="@color/market_back">
 
-
-
         <!-- Market Button -->
-        <ImageButton
-            android:id="@+id/market_button"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/trade"
-            android:textColor="@android:color/white"
-            android:background="@drawable/imagebuttonback" />
+            android:orientation="vertical"
+            android:background="@color/market_back"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/market_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/trade"
+                android:background="@drawable/imagebuttonback" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Market"
+                android:textColor="@android:color/white"
+                android:background="@color/market_back"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"/>
+        </LinearLayout>
 
         <!-- Orders Button -->
-        <ImageButton
-            android:id="@+id/order_button"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Orders"
-            android:src="@drawable/purchase"
-            android:textColor="@android:color/white"
+            android:orientation="vertical"
+            android:gravity="center"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/imagebuttonback" />
+            android:background="@color/market_back"
+            android:layout_marginRight="8dp">
 
-        <ImageButton
-            android:id="@+id/home_button"
+            <ImageButton
+                android:id="@+id/order_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/purchase"
+                android:background="@drawable/imagebuttonback" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  Orders"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/roboto_medium"
+                android:background="@color/market_back"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <!-- Home Button -->
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/imagebuttonback"
-            android:src="@drawable/home"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:background="@color/market_back"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/home_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/home"
+                android:background="@drawable/imagebuttonback" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textColor="@android:color/white"
+                android:background="@color/market_back"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"/>
+        </LinearLayout>
 
         <!-- Portfolio Button -->
-        <ImageButton
-            android:id="@+id/portfolio_button"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/market_back"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/portfolio_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/investment"
+                android:background="@drawable/imagebuttonback" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Portfolio"
+                android:background="@color/market_back"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@android:color/white"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <!-- Settings Button -->
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Portfolio"
-            android:src="@drawable/investment"
-            android:textColor="@android:color/white"
-            android:background="@drawable/imagebuttonback" />
+            android:orientation="vertical"
+            android:background="@color/market_back"
+            android:gravity="center">
 
-        <ImageButton
-            android:id="@+id/setting_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/imagebuttonback"
-            android:src="@drawable/settings"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
+            <ImageButton
+                android:id="@+id/setting_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/settings"
+                android:background="@drawable/imagebuttonback" />
 
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Settings"
+                android:textColor="@android:color/white"
+                android:background="@color/market_back"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"/>
+        </LinearLayout>
 
     </LinearLayout>
 </RelativeLayout>

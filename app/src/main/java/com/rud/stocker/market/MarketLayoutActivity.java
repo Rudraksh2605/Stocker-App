@@ -333,7 +333,7 @@ public class MarketLayoutActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             performStockAction("sell", stock.getSymbol(), stock.getNameOfCompany(), stock.getCurrentPrice(), dialogQuantity.getText().toString(), dialogTotalAmount.getText().toString());
-                            dialog.dismiss(); // Close the dialog after action
+                            dialog.dismiss();
                         }
                     });
 
@@ -364,47 +364,159 @@ public class MarketLayoutActivity extends AppCompatActivity {
 
         private void performStockAction(String action, String symbol, String companyName, String BuyPrice, String quantity, String totalAmount) {
             FirebaseUser user = firebaseAuth.getCurrentUser();
-            database db = new database();
 
             if (user != null) {
                 if (quantity.isEmpty() || Integer.parseInt(quantity) <= 0) {
                     Toast.makeText(MarketLayoutActivity.this, "Quantity must be greater than 0", Toast.LENGTH_SHORT).show();
-                    return; // Exit the function without placing the order
+                    return;
                 }
 
-                String email = user.getEmail();
-                Map<String, Object> stock = new HashMap<>();
-                stock.put("symbol", symbol);
-                stock.put("companyName", companyName);
-                stock.put("BuyPrice", BuyPrice);
-                stock.put("quantity", quantity);
-                stock.put("totalAmount", totalAmount);
+                final String email = user.getEmail();
+                final int newQuantity = Integer.parseInt(quantity);
+                final double newBuyPrice = Double.parseDouble(BuyPrice);
+                final double newTotalAmount = Double.parseDouble(totalAmount);
 
-                // Reference to the user's document
-                DocumentReference userDocRef = firebaseFirestore.collection("users").document(email);
+                final Map<String, Object> orderEntry = new HashMap<>();
+                orderEntry.put("action", action);
+                orderEntry.put("symbol", symbol);
+                orderEntry.put("companyName", companyName);
+                orderEntry.put("quantity", quantity);
+                orderEntry.put("totalAmount", totalAmount);
 
-                // Use set() with merge option to create the document if it doesn't exist
-                userDocRef.set(new HashMap<>(), SetOptions.merge())
-                        .addOnSuccessListener(aVoid -> {
-                            Log.d("Firestore", "User document created or merged successfully");
+                final DocumentReference userDocRef = firebaseFirestore.collection("users").document(email);
 
-                            if ("buy".equals(action)) {
-                                // Add the stock to the user's portfolio in Firestore
-                                userDocRef.update("Portfolio", FieldValue.arrayUnion(stock))
-                                        .addOnSuccessListener(aVoid1 -> Log.d("Firestore", "Stock bought and added to portfolio"))
-                                        .addOnFailureListener(e -> Log.e("Firestore", "Error adding stock", e));
+                userDocRef.get().addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Double balance = documentSnapshot.getDouble("Balance");
+                        if (balance == null) {
+                            Log.e("Firestore", "Balance field is missing");
+                            return;
+                        }
 
-                            } else if ("sell".equals(action)) {
-                                // Remove the stock from the user's portfolio in Firestore
-                                userDocRef.update("Portfolio", FieldValue.arrayRemove(stock))
-                                        .addOnSuccessListener(aVoid1 -> Log.d("Firestore", "Stock sold and removed from portfolio"))
-                                        .addOnFailureListener(e -> Log.e("Firestore", "Error removing stock", e));
+                        if ("buy".equals(action)) {
+                            if (newTotalAmount > balance) {
+                                Toast.makeText(MarketLayoutActivity.this, "Insufficient balance to buy the stock", Toast.LENGTH_SHORT).show();
+                                return;
+                            } else {
+                                balance -= newTotalAmount;
+
+                                List<Map<String, Object>> portfolio = (List<Map<String, Object>>) documentSnapshot.get("Portfolio");
+                                Map<String, Object> existingStock = null;
+
+                                if (portfolio != null) {
+                                    for (Map<String, Object> stockEntry : portfolio) {
+                                        if (stockEntry.get("symbol").equals(symbol)) {
+                                            existingStock = stockEntry;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (existingStock != null) {
+                                    int existingQuantity = Integer.parseInt(existingStock.get("quantity").toString());
+                                    double existingBuyPrice = Double.parseDouble(existingStock.get("BuyPrice").toString());
+                                    double existingTotalAmount = Double.parseDouble(existingStock.get("totalAmount").toString());
+
+                                    int updatedQuantity = existingQuantity + newQuantity;
+                                    double updatedBuyPrice = ((existingBuyPrice * existingQuantity) + (newBuyPrice * newQuantity)) / updatedQuantity;
+                                    double updatedTotalAmount = existingTotalAmount + newTotalAmount;
+
+                                    existingStock.put("quantity", String.valueOf(updatedQuantity));
+                                    existingStock.put("BuyPrice", String.valueOf(updatedBuyPrice));
+                                    existingStock.put("totalAmount", String.valueOf(updatedTotalAmount));
+
+                                    userDocRef.update("Portfolio", portfolio)
+                                            .addOnSuccessListener(aVoid -> Log.d("Firestore", "Stock quantity and buy price updated"))
+                                            .addOnFailureListener(e -> Log.e("Firestore", "Error updating stock", e));
+                                } else {
+                                    Map<String, Object> newStock = new HashMap<>();
+                                    newStock.put("symbol", symbol);
+                                    newStock.put("companyName", companyName);
+                                    newStock.put("quantity", quantity);
+                                    newStock.put("BuyPrice", BuyPrice);
+                                    newStock.put("totalAmount", totalAmount);
+
+                                    userDocRef.update("Portfolio", FieldValue.arrayUnion(newStock))
+                                            .addOnSuccessListener(aVoid -> Log.d("Firestore", "Stock bought and added to portfolio"))
+                                            .addOnFailureListener(e -> Log.e("Firestore", "Error adding stock", e));
+                                }
+
+                                userDocRef.update("Balance", balance)
+                                        .addOnSuccessListener(aVoid -> Log.d("Firestore", "Balance updated"))
+                                        .addOnFailureListener(e -> Log.e("Firestore", "Error updating balance", e));
+
+                                userDocRef.update("Orders", FieldValue.arrayUnion(orderEntry))
+                                        .addOnSuccessListener(aVoid -> Log.d("Firestore", "Order added to Orders"))
+                                        .addOnFailureListener(e -> Log.e("Firestore", "Error adding order", e));
                             }
-                        })
-                        .addOnFailureListener(e -> Log.e("Firestore", "Error creating or merging user document", e));
+                        } else if ("sell".equals(action)) {
+                            List<Map<String, Object>> portfolio = (List<Map<String, Object>>) documentSnapshot.get("Portfolio");
+                            Map<String, Object> existingStock = null;
+
+                            if (portfolio != null) {
+                                for (Map<String, Object> stockEntry : portfolio) {
+                                    if (stockEntry.get("symbol").equals(symbol)) {
+                                        existingStock = stockEntry;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (existingStock != null) {
+                                int existingQuantity = Integer.parseInt(existingStock.get("quantity").toString());
+                                double existingTotalAmount = Double.parseDouble(existingStock.get("totalAmount").toString());
+
+                                int enteredQuantity = Integer.parseInt(quantity);
+                                double currentPrice = existingTotalAmount / existingQuantity;
+                                int updatedQuantity = existingQuantity - enteredQuantity;
+                                double updatedTotalAmount = currentPrice * updatedQuantity;
+
+                                if (existingQuantity >= enteredQuantity) {
+                                    if (updatedQuantity == 0) {
+                                        userDocRef.update("Portfolio", FieldValue.arrayRemove(existingStock))
+                                                .addOnSuccessListener(aVoid -> {
+                                                    userDocRef.update("Balance", FieldValue.increment(existingTotalAmount))
+                                                            .addOnSuccessListener(balanceVoid -> {
+                                                                Log.d("Firestore", "Stock sold, removed from portfolio, and balance updated");
+                                                                Intent intent = new Intent(MarketLayoutActivity.this, MarketLayoutActivity.class);
+                                                                startActivity(intent);
+                                                                finish();
+                                                            })
+                                                            .addOnFailureListener(e -> Log.e("Firestore", "Error updating balance", e));
+                                                })
+                                                .addOnFailureListener(e -> Log.e("Firestore", "Error removing stock from portfolio", e));
+                                    } else {
+                                        existingStock.put("quantity", String.valueOf(updatedQuantity));
+                                        existingStock.put("totalAmount", String.valueOf(updatedTotalAmount));
+
+                                        userDocRef.update("Portfolio", portfolio)
+                                                .addOnSuccessListener(aVoid -> {
+                                                    userDocRef.update("Balance", FieldValue.increment(existingTotalAmount - updatedTotalAmount))
+                                                            .addOnSuccessListener(balanceVoid -> {
+                                                                Log.d("Firestore", "Balance updated successfully");
+                                                                Intent intent = new Intent(MarketLayoutActivity.this, MarketLayoutActivity.class);
+                                                                startActivity(intent);
+                                                                finish();
+                                                            })
+                                                            .addOnFailureListener(e -> Log.e("Firestore", "Error updating balance", e));
+                                                })
+                                                .addOnFailureListener(e -> Log.e("Firestore", "Error updating stock in portfolio", e));
+                                    }
+
+                                    userDocRef.update("Orders", FieldValue.arrayUnion(orderEntry))
+                                            .addOnSuccessListener(aVoid -> Log.d("Firestore", "Order added to Orders array"))
+                                            .addOnFailureListener(e -> Log.e("Firestore", "Error adding order", e));
+                                } else {
+                                    Log.e("Firestore", "Entered quantity is greater than available quantity");
+                                }
+                            } else {
+                                Log.e("Firestore", "Stock does not exist in portfolio to sell");
+                            }
+                        }
+                    }
+                }).addOnFailureListener(e -> Log.e("Firestore", "Error fetching user document", e));
             }
         }
-
 
         @Override
         public int getItemCount() {

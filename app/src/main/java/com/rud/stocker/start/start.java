@@ -20,7 +20,7 @@ public class start extends AppCompatActivity {
         database db = new database();
         db.Database();
         db.createUserData();
-        db.updateTotalAnount();
+        db.updateTotalAmount();
         db.updateCurrent();
         db.updateProfit();
 

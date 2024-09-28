@@ -42,7 +42,10 @@ public class database {
                             userData.put("Total Return", 0);
                             userData.put("1D Return", 0);
                             userData.put("Invested", 0);
+                            userData.put("Balance", 1000000);
                             userData.put("Portfolio", new ArrayList<>());
+                            userData.put("PortfolioProfit",0);
+                            userData.put("Orders", new ArrayList<>());
 
                             db.collection("users")
                                     .document(emailId)
@@ -64,7 +67,7 @@ public class database {
     }
 
 
-    public void updateTotalAnount() {
+    public void updateTotalAmount() {
         Log.d("Update", "Update method called");
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
@@ -237,8 +240,10 @@ public class database {
 
                                                     double currentValue = currentPrice * quantity;
                                                     double profitPerStock = currentValue - invested;
+                                                    totalProfit += profitPerStock;
 
 
+                                                    stockItem.put("Profit", totalProfit);
                                                     stockItem.put("ProfitPerStock", profitPerStock);
                                                     totalCurrentValue += currentValue;
 
