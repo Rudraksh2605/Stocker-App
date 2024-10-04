@@ -57,7 +57,7 @@ public class Log_In_Page extends AppCompatActivity {
     private UserPreferences userPreferences;
     private FirebaseAuth fauth;
     private FirebaseDatabase database;
-    private static final int REQ_ONE_TAP = 2;  // Can be any integer unique to the Activity.
+    private static final int REQ_ONE_TAP = 2;
     private boolean showOneTapUI = true;
     private SignInClient oneTapClient;
     private BeginSignInRequest signInRequest;
@@ -73,19 +73,19 @@ public class Log_In_Page extends AppCompatActivity {
                 SignInCredential credential = oneTapClient.getSignInCredentialFromIntent(data);
                 String idToken = credential.getGoogleIdToken();
                 if (idToken != null) {
-                    // Got an ID token from Google. Use it to authenticate with Firebase.
+
                     AuthCredential firebaseCredential = GoogleAuthProvider.getCredential(idToken, null);
                     mAuth.signInWithCredential(firebaseCredential)
                             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        // Sign in success, update UI with the signed-in user's information
+
                                         Log.d(TAG, "signInWithCredential:success");
                                         FirebaseUser user = mAuth.getCurrentUser();
                                         updateUI(user);
                                     } else {
-                                        // If sign in fails, display a message to the user.
+
                                         Log.w(TAG, "signInWithCredential:failure", task.getException());
                                         updateUI(null);
                                     }
@@ -130,7 +130,6 @@ public class Log_In_Page extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
@@ -216,7 +215,7 @@ public class Log_In_Page extends AppCompatActivity {
         }
     }
 
-    // Function to start Google Sign-In process
+
     private void signInWithGoogle() {
         oneTapClient.beginSignIn(signInRequest)
                 .addOnSuccessListener(this, result -> {

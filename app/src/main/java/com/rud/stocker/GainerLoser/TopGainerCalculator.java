@@ -13,7 +13,7 @@ public class TopGainerCalculator {
             String closingPriceStr = closingPrices.get(stock);
             String currentPriceStr = currentPrices.get(stock);
 
-            // Check if both prices are present and valid
+
             if (closingPriceStr != null && currentPriceStr != null &&
                     !closingPriceStr.trim().isEmpty() && !currentPriceStr.trim().isEmpty()) {
 
@@ -21,7 +21,7 @@ public class TopGainerCalculator {
                     double closingPrice = Double.parseDouble(closingPriceStr.trim());
                     double currentPrice = Double.parseDouble(currentPriceStr.trim());
 
-                    // Calculate percentage change
+
                     if (closingPrice > 0) {
                         double percentageChange = ((currentPrice - closingPrice) / closingPrice) * 100;
                         topGainers.put(stock, percentageChange);
@@ -36,7 +36,7 @@ public class TopGainerCalculator {
             }
         }
 
-        // Sort by percentage change (descending)
+
         return topGainers.entrySet()
                 .stream()
                 .sorted((entry1, entry2) -> Double.compare(entry2.getValue(), entry1.getValue()))
