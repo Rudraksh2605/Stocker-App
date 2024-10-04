@@ -51,7 +51,7 @@
         android:id="@+id/stock_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:layout_above="@+id/trade_actions"
         android:layout_below="@id/toolbar"
         android:background="@color/market_back" />

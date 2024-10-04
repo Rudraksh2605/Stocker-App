@@ -170,19 +170,15 @@ public class MarketLayoutActivity extends AppCompatActivity {
                     apiDataRetrieval.startRealtimeUpdates(new ApiDataRetrieval.ApiDataCallback() {
                         @Override
                         public void onDataFetched(List<ApiResponseItem> apiDataModels) {
-                            // Original List --> UI Thread
                             runOnUiThread(() -> {
-                                if (!isSearching) {
-                                    originalStockList = apiDataModels;
-                                    stockAdapter.updateStockList(apiDataModels);
-                                    updateStockMap(apiDataModels);
-                                    Log.e("Updated UI", "No error");
-                                }
+                                originalStockList = apiDataModels;
+                                stockAdapter.updateStockList(apiDataModels);
+                                updateStockMap(apiDataModels);
+                                Log.e("Updated UI", "No error");
                             });
                         }
-
-
                     });
+
                 }
             }
 
