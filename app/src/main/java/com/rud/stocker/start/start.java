@@ -6,6 +6,7 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.rud.stocker.Database.database;
+import com.rud.stocker.GainerLoser.LoserClass;
 import com.rud.stocker.R;
 import com.rud.stocker.auth.Log_In_Page;
 
@@ -18,17 +19,22 @@ public class start extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.open_animation);
         database db = new database();
+
+
+        LoserClass loss = new LoserClass();
+        loss.fetchAndSaveLosers();
+
         db.Database();
         db.createUserData();
         db.updateTotalAmount();
         db.updateCurrent();
         db.updateProfit();
 
-        // Create a new Handler to post a Runnable after 2 seconds
+
         new Handler().postDelayed(() -> {
             // Start the next activity
             startActivity(new Intent(start.this, Log_In_Page.class));
-            finish(); // Close the splash screen
+            finish();
         }, DISPLAY_DURATION);
     }
 }

@@ -5,7 +5,7 @@ public class Stock {
     private String percentageGain;
 
     // Required empty constructor for Firebase
-    public Stock() {}
+    public Stock(String stockName, Double percentageChange) {}
 
     public Stock(String stockName, String percentageGain) {
         this.stockName = stockName;

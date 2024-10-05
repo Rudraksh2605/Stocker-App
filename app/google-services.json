@@ -39,6 +39,14 @@
           }
         },
         {
+          "client_id": "897489800348-pskgu9mef16ec32vs92d91nal80kcbm6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rud.stocker",
+            "certificate_hash": "339d4d74dc2b215d5ca748559d92f34216070ccd"
+          }
+        },
+        {
           "client_id": "897489800348-irj94u46lhnue2ddato3m29d98ntsa0a.apps.googleusercontent.com",
           "client_type": 3
         }
