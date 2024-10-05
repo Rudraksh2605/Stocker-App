@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -19,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rud.stocker.GainerLoser.LoserClass;
+import com.rud.stocker.GainerLoser.LossList;
+import com.rud.stocker.GainerLoser.TopGainerList;
 import com.rud.stocker.Order.Order_Layout;
 import com.rud.stocker.Portfolio.Portfolio_Layout;
 import com.rud.stocker.R;
@@ -46,6 +49,28 @@ public class Home_Layout extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_layout);
+
+        View belowGainer2 = findViewById(R.id.below_gainer_2);
+        View belowLoser2 = findViewById(R.id.below_loser_2);
+
+        belowLoser2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Home_Layout.this, LossList.class);
+                startActivity(intent);
+            }
+        });
+
+
+        belowGainer2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Home_Layout.this, TopGainerList.class);
+                startActivity(intent);
+            }
+        });
 
         marketButton = findViewById(R.id.market_button);
         portfolioButton = findViewById(R.id.portfolio_button);
@@ -148,4 +173,5 @@ public class Home_Layout extends AppCompatActivity {
             }
         });
     }
+
 }

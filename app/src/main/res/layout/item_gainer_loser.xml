@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/market_back">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/market_back"
+        android:gravity="center_vertical"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/stock_symbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/market_back"
+                android:textSize="20sp"
+                android:text="Stocker"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:fontFamily="@font/roboto_light"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/percent_change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/market_back"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:textSize="20sp"
+                android:text="100"
+                android:textStyle="bold"
+                android:fontFamily="@font/roboto_light"
+                android:textColor="@color/white" />
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/market_back"
+            android:gravity="center_vertical"
+            >
+            <TextView
+                android:id="@+id/stock_name"
+                android:background="@color/market_back"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Rudraksh"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/roboto_light"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/stock_price"
+                android:layout_width="wrap_content"
+                android:background="@color/market_back"
+                android:text="20"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:fontFamily="@font/roboto_light"
+                android:layout_marginTop="4dp"
+                />
+        </LinearLayout>
+
+        <!-- Add more views for other stock details -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginTop="10dp"
+            android:background="#2a2a2a" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

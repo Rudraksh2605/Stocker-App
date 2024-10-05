@@ -41,10 +41,13 @@
             android:exported="true" />
 
         <activity
-            android:name="com.rud.stocker.purchase_window.StockDetailsActivity"
+            android:name="com.rud.stocker.Order.Order_Layout"
             android:exported="true" />
         <activity
-            android:name="com.rud.stocker.Order.Order_Layout"
+            android:name="com.rud.stocker.GainerLoser.TopGainerList"
+            android:exported="true" />
+        <activity
+            android:name="com.rud.stocker.GainerLoser.LossList"
             android:exported="true" />
     </application>
 
