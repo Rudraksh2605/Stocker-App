@@ -15,40 +15,6 @@
         android:gravity="center_vertical"
         android:padding="8dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="2"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/stock_symbol"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/market_back"
-                android:textSize="20sp"
-                android:text="Stocker"
-                android:layout_weight="1"
-                android:textStyle="bold"
-                android:fontFamily="@font/roboto_light"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/percent_change"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/market_back"
-                android:layout_weight="1"
-                android:gravity="end"
-                android:textSize="20sp"
-                android:text="100"
-                android:textStyle="bold"
-                android:fontFamily="@font/roboto_light"
-                android:textColor="@color/white" />
-
-
-        </LinearLayout>
-
 
 
         <LinearLayout
@@ -71,7 +37,7 @@
                 android:layout_marginTop="4dp" />
 
             <TextView
-                android:id="@+id/stock_price"
+                android:id="@+id/percent_change"
                 android:layout_width="wrap_content"
                 android:background="@color/market_back"
                 android:text="20"

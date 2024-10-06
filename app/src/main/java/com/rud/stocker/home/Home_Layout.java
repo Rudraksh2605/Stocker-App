@@ -53,6 +53,10 @@ public class Home_Layout extends AppCompatActivity {
         View belowGainer2 = findViewById(R.id.below_gainer_2);
         View belowLoser2 = findViewById(R.id.below_loser_2);
 
+        View belowLoser3 = findViewById(R.id.below_loser_1);
+        TextView stockName3Loser = findViewById(R.id.stock_name_3);
+        TextView percentageLoss3 = findViewById(R.id.percentage_gain_3);
+
         belowLoser2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,8 +151,11 @@ public class Home_Layout extends AppCompatActivity {
             }
         });
 
-        // Top Losers Data Fetch (show top 2)
+
         topLosersRef.addValueEventListener(new ValueEventListener() {
+
+            String thirdStockNameLoser = "";
+            String thirdStockLoss = "";
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 topLoserList.clear();
@@ -161,8 +168,16 @@ public class Home_Layout extends AppCompatActivity {
                     if (percentageLoss != null && count < 2) {
                         topLoserList.add(new Stock(stockName, percentageLoss.toString() + "%"));
                         count++;
+                    } else if (count == 2) {
+                        thirdStockNameLoser = stockName;
+                        thirdStockLoss = percentageLoss.toString() + "%";
+                        break;
+
                     }
                 }
+
+                stockName3Loser.setText(thirdStockNameLoser);
+                percentageLoss3.setText(thirdStockLoss);
 
                 lossStockAdapter.notifyDataSetChanged();
             }
